@@ -48,9 +48,6 @@ public class RedisConfiguration {
     @Autowired
     RedisProperties redisProperties;
 
-    @Autowired
-    RedisTemplate<String, String> redisTemplate;
-
     @Primary
     @Bean
     CacheManager redisCacheManager(LettuceConnectionFactory redisConnectionFactory) {
@@ -81,8 +78,8 @@ public class RedisConfiguration {
     }
 
     @Bean
-    RedisOperator redisOperator() {
-        return new RedisOperator(redisProperties, redisTemplate);
+    RedisOperator redisOperator(RedisTemplate<String, String> redisTemplate) {
+        return new RedisOperator(redisTemplate);
     }
 
     private String getPassword() {

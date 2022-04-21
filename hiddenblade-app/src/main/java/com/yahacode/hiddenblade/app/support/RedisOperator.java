@@ -1,6 +1,7 @@
 package com.yahacode.hiddenblade.app.support;
 
 import com.yahacode.hiddenblade.app.cache.RedisProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,12 +21,12 @@ import java.util.Set;
  */
 public class RedisOperator {
 
+    @Autowired
     private RedisProperties properties;
 
     private RedisTemplate<String, String> redisTemplate;
 
-    public RedisOperator(RedisProperties properties, RedisTemplate redisTemplate) {
-        this.properties = properties;
+    public RedisOperator(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
