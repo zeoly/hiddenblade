@@ -5,11 +5,13 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
@@ -35,18 +37,20 @@ import java.util.ServiceLoader;
  */
 @EnableCaching
 @Configuration
-@ConditionalOnBean(RedisProperties.class)
-public class RedisConfig {
+@ConditionalOnProperty(prefix = "hb.redis", value = "nodes")
+@EnableConfigurationProperties(RedisProperties.class)
+public class RedisConfiguration {
 
-    private static Logger log = LoggerFactory.getLogger(RedisConfig.class);
+    private static Logger log = LoggerFactory.getLogger(RedisConfiguration.class);
 
     @Autowired
     RedisProperties redisProperties;
 
+    @Primary
     @Bean
     CacheManager redisCacheManager(LettuceConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration configuration = buildConfigWithTimeout(Duration.ofSeconds(redisProperties.getDefaultTimeout()));
-        log.info("hidden blade redis cache manager init ...");
+        log.info("init redis cache manager ...");
         RedisCacheManager.RedisCacheManagerBuilder redisCacheManagerBuilder = RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory).cacheDefaults(configuration).transactionAware();
         if (redisProperties.getCustomTimeout() != null) {
@@ -60,13 +64,13 @@ public class RedisConfig {
         if (redisProperties.getMode() == RedisMode.CLUSTER) {
             RedisClusterConfiguration configuration = new RedisClusterConfiguration(redisProperties.getNodes());
             configuration.setPassword(getPassword());
-            log.info("hidden blade redis cluster init ...");
+            log.info("init redis cluster mode ...");
             return new LettuceConnectionFactory(configuration);
         } else {
             String[] node = redisProperties.getNodes().get(0).split(":");
             RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(node[0], Integer.parseInt(node[1]));
             configuration.setPassword(getPassword());
-            log.info("hidden blade redis standalone init ...");
+            log.info("init redis standalone mode ...");
             return new LettuceConnectionFactory(configuration);
         }
     }

@@ -1,1 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.yahacode.hiddenblade.app.cache.RedisConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.yahacode.hiddenblade.app.cache.RedisConfiguration,\
+com.yahacode.hiddenblade.app.cache.CaffeineConfiguration

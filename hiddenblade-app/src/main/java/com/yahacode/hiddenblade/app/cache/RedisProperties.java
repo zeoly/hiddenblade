@@ -2,9 +2,7 @@ package com.yahacode.hiddenblade.app.cache;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -15,8 +13,6 @@ import java.util.Map;
  * @author zengyongli
  * @since 2022/04/12
  */
-@Component
-@ConditionalOnProperty(prefix = "hb.redis", value = "nodes")
 @ConfigurationProperties(prefix = "hb.redis")
 public class RedisProperties {
 
