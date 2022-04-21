@@ -1,9 +1,15 @@
 package com.yahacode.hiddenblade.tool.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * json format utilities
@@ -38,6 +44,49 @@ public class JsonUtil {
             return getMapper().readValue(jsonString, clazz);
         } catch (JsonProcessingException e) {
             log.warn("String to object fail, String: " + jsonString + ", type: " + clazz.getSimpleName(), e);
+            return null;
+        }
+    }
+
+    public static <T> List<T> toList(String jsonString, Class<T> clazz) {
+        try {
+            JavaType javaType = getMapper().getTypeFactory().constructParametricType(ArrayList.class, clazz);
+            return getMapper().readValue(jsonString, javaType);
+        } catch (JsonProcessingException e) {
+            log.warn("String to list fail, String: {}, type: {}", jsonString, clazz.getSimpleName(), e);
+            return null;
+        }
+    }
+
+    public static JsonNode toJsonNode(String jsonString) {
+        try {
+            return getMapper().readTree(jsonString);
+        } catch (Exception e) {
+            log.warn("String to node fail, String: {}", jsonString, e);
+            return null;
+        }
+    }
+
+    public static JsonNode objToJsonNode(Object obj) {
+        try {
+            return toJsonNode(toStr(obj));
+        } catch (Exception e) {
+            log.warn("obj to node fail, obj: {}", obj.toString(), e);
+            return null;
+        }
+    }
+
+    public static List<JsonNode> toJsonNodeList(String jsonString) {
+        JsonNode node = toJsonNode(jsonString);
+        if (node != null && node.isArray()) {
+            List<JsonNode> list = new ArrayList<>();
+            Iterator<JsonNode> iterator = node.elements();
+            while (iterator.hasNext()) {
+                list.add(iterator.next());
+            }
+            return list;
+        } else {
+            log.warn("String to node list fail, String: {}", jsonString);
             return null;
         }
     }
