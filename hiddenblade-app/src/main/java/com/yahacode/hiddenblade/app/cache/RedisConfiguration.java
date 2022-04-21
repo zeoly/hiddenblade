@@ -1,6 +1,7 @@
 package com.yahacode.hiddenblade.app.cache;
 
 import com.yahacode.hiddenblade.app.spi.RedisPasswordAdapter;
+import com.yahacode.hiddenblade.app.support.RedisOperator;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -45,6 +47,9 @@ public class RedisConfiguration {
 
     @Autowired
     RedisProperties redisProperties;
+
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
 
     @Primary
     @Bean
@@ -73,6 +78,11 @@ public class RedisConfiguration {
             log.info("init redis standalone mode ...");
             return new LettuceConnectionFactory(configuration);
         }
+    }
+
+    @Bean
+    RedisOperator redisOperator() {
+        return new RedisOperator(redisProperties, redisTemplate);
     }
 
     private String getPassword() {
