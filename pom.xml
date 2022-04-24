@@ -6,10 +6,11 @@
 
     <groupId>com.yahacode</groupId>
     <artifactId>hiddenblade</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <modules>
         <module>hiddenblade-tool</module>
         <module>hiddenblade-app</module>
+        <module>hiddenblade-iot</module>
     </modules>
     <packaging>pom</packaging>
 
