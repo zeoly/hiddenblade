@@ -17,7 +17,7 @@ public class StringUtil extends StringUtils {
      * @param str the String to check
      * @return true if is numeric format
      */
-    public static boolean isNumericFormat(String str) {
+    public static Boolean isNumericFormat(String str) {
         if (isEmpty(str)) {
             return false;
         }
@@ -30,7 +30,7 @@ public class StringUtil extends StringUtils {
      * @param str the String to check
      * @return true if is coordinates
      */
-    public static boolean isCoordinates(String str) {
+    public static Boolean isCoordinates(String str) {
         if (isEmpty(str)) {
             return false;
         }
@@ -42,7 +42,7 @@ public class StringUtil extends StringUtils {
         }
     }
 
-    public static boolean isJson(String str) {
+    public static Boolean isJson(String str) {
         if ("null".equals(str) || isEmpty(str)) {
             return false;
         }

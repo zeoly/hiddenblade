@@ -10,4 +10,12 @@ public class ByteUtil {
         }
         return data;
     }
+
+    public static byte[] subBytes(byte[] data, int start, int length) {
+        byte[] result = new byte[length];
+        if ((null != data) && (start < data.length) && (start + length <= data.length)) {
+            System.arraycopy(data, start, result, 0, length);
+        }
+        return result;
+    }
 }
