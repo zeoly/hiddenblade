@@ -1,8 +1,16 @@
 # data
 
-functionId|data
--|-
-0x00|GPS
-0x01|CAN
-0x03|Device version
-0x07|SIM
+functionId|data|status
+-|-|-
+0x00|GPS|x
+0x01|CAN|x
+0x02|DTC|
+0x03|Device version|x
+0x04|Alert|
+0x05|Heartbeat|
+0x06|Driving scene|
+0x07|SIM|x
+0x0A|Vehicle|x
+0xA0|Max GPS|
+0xA1|Max CAN|
+
