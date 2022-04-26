@@ -4,7 +4,7 @@ functionId|data|status
 -|-|-
 0x00|GPS|x
 0x01|CAN|x
-0x02|DTC|
+0x02|DTC|x
 0x03|Device version|x
 0x04|Alert|x
 0x05|Heartbeat|
@@ -12,6 +12,6 @@ functionId|data|status
 0x07|SIM|x
 0x0A|Vehicle|x
 0x97|Start and stop|x
-0xA0|Max GPS|
+0xA0|Max GPS|x
 0xA1|Max CAN|
 
