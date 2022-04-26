@@ -1,4 +1,4 @@
-package com.yahacode.iot.protocol.box.dina.data.can;
+package com.yahacode.iot.protocol.box.dina.data.sub;
 
 public enum MileageType {
 

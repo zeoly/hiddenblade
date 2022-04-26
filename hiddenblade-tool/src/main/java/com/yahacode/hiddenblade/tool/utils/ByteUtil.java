@@ -11,6 +11,18 @@ public class ByteUtil {
         return data;
     }
 
+    public static String bytesToHexString(byte[] bytes) {
+        StringBuffer stringBuffer = new StringBuffer(bytes.length);
+        for (int i = 0; i < bytes.length; i++) {
+            String s = Integer.toHexString(0xff & bytes[i]);
+            if (s.length() < 2) {
+                stringBuffer.append("0");
+            }
+            stringBuffer.append(s.toUpperCase());
+        }
+        return stringBuffer.toString();
+    }
+
     public static byte[] subBytes(byte[] data, int start, int length) {
         byte[] result = new byte[length];
         if ((null != data) && (start < data.length) && (start + length <= data.length)) {

@@ -1,6 +1,6 @@
-package com.yahacode.iot.protocol.box.dina.data.can;
+package com.yahacode.iot.protocol.box.dina.data.sub;
 
-public class LockStatus {
+public class WindowStatus {
 
     Boolean leftFront;
 
@@ -9,8 +9,6 @@ public class LockStatus {
     Boolean leftBack;
 
     Boolean rightBack;
-
-    Boolean truck;
 
     public Boolean getLeftFront() {
         return leftFront;
@@ -42,13 +40,5 @@ public class LockStatus {
 
     public void setRightBack(Boolean rightBack) {
         this.rightBack = rightBack;
-    }
-
-    public Boolean getTruck() {
-        return truck;
-    }
-
-    public void setTruck(Boolean truck) {
-        this.truck = truck;
     }
 }

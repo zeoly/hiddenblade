@@ -1,12 +1,12 @@
 package com.yahacode.iot.protocol.box.dina.data;
 
-import com.yahacode.iot.protocol.box.dina.data.can.DoorStatus;
-import com.yahacode.iot.protocol.box.dina.data.can.Gear;
-import com.yahacode.iot.protocol.box.dina.data.can.LightStatus;
-import com.yahacode.iot.protocol.box.dina.data.can.LockStatus;
-import com.yahacode.iot.protocol.box.dina.data.can.MileageType;
-import com.yahacode.iot.protocol.box.dina.data.can.SecurityStatus;
-import com.yahacode.iot.protocol.box.dina.data.can.WindowStatus;
+import com.yahacode.iot.protocol.box.dina.data.sub.DoorStatus;
+import com.yahacode.iot.protocol.box.dina.data.sub.Gear;
+import com.yahacode.iot.protocol.box.dina.data.sub.LightStatus;
+import com.yahacode.iot.protocol.box.dina.data.sub.LockStatus;
+import com.yahacode.iot.protocol.box.dina.data.sub.MileageType;
+import com.yahacode.iot.protocol.box.dina.data.sub.SecurityStatus;
+import com.yahacode.iot.protocol.box.dina.data.sub.WindowStatus;
 
 import java.time.LocalDateTime;
 

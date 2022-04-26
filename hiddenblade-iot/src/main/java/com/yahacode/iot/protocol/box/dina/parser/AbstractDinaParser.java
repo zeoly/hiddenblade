@@ -30,6 +30,15 @@ public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
         return result;
     }
 
+    protected int toSignedInt(byte[] data, int start, int length) {
+        int signedBit = bitFlag(data[start], 7) ? -1 : 1;
+        int result = data[start] & 0x7f;
+        for (int index = start + 1; index < start + length; index++) {
+            result = (result << 8) | toInt(data[index]);
+        }
+        return signedBit * result;
+    }
+
     protected long toLong(byte[] data, int start, int length) {
         long result = 0;
         for (int index = start; index < start + length; index++) {
@@ -45,5 +54,9 @@ public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
             log.warn("parse byte to String fail", e);
             return null;
         }
+    }
+
+    protected boolean bitFlag(byte data, int bit) {
+        return (data & (1 << bit)) > 0;
     }
 }
