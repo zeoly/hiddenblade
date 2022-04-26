@@ -1,0 +1,7 @@
+# data
+
+functionId|data
+-|-
+0x00|GPS
+0x01|CAN
+0x03|Device version

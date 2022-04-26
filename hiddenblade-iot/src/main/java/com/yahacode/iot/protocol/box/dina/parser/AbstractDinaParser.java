@@ -1,10 +1,16 @@
 package com.yahacode.iot.protocol.box.dina.parser;
 
+import com.yahacode.hiddenblade.tool.utils.ByteUtil;
 import com.yahacode.iot.protocol.TerminalDataParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 
 public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractDinaParser.class);
 
     private static final int TIME_ZONE = 8;
 
@@ -30,5 +36,14 @@ public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
             result = (result << 8) | ((long) toInt(data[index]));
         }
         return result;
+    }
+
+    protected String toString(byte[] data, int start, int length) {
+        try {
+            return new String(ByteUtil.subBytes(data, start, length), "US-ASCII").trim();
+        } catch (UnsupportedEncodingException e) {
+            log.warn("parse byte to String fail", e);
+            return null;
+        }
     }
 }
