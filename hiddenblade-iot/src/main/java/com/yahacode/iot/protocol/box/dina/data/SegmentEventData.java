@@ -1,21 +1,21 @@
 package com.yahacode.iot.protocol.box.dina.data;
 
-import com.yahacode.iot.protocol.box.dina.data.sub.StartStop;
+import com.yahacode.iot.protocol.box.dina.data.sub.SegmentType;
 
-public class StartStopData extends GpsData {
+public class SegmentEventData extends GpsData {
 
-    private StartStop startStop;
+    private SegmentType type;
 
     Integer totalMileage;
 
     Integer totalConsumption;
 
-    public StartStop getStartStop() {
-        return startStop;
+    public SegmentType getType() {
+        return type;
     }
 
-    public void setStartStop(StartStop startStop) {
-        this.startStop = startStop;
+    public void setType(SegmentType type) {
+        this.type = type;
     }
 
     public Integer getTotalMileage() {

@@ -1,6 +1,6 @@
 package com.yahacode.iot.protocol.box.dina.data.sub;
 
-public enum StartStop {
+public enum SegmentType {
 
     START, STOP;
 }

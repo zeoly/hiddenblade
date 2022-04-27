@@ -2,18 +2,18 @@ package com.yahacode.iot.protocol.box.dina.parser;
 
 import com.yahacode.hiddenblade.tool.utils.ByteUtil;
 import com.yahacode.iot.protocol.box.dina.DinaMessage;
-import com.yahacode.iot.protocol.box.dina.data.StartStopData;
+import com.yahacode.iot.protocol.box.dina.data.SegmentEventData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
-class StartStopDataParserTest {
+class SegmentEventDataParserTest {
 
 
     @InjectMocks
-    StartStopDataParser parser;
+    SegmentEventDataParser parser;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,7 @@ class StartStopDataParserTest {
                 + "3E 0C 00 01 00 8A 00 01 00 01 52 59 7F 00 15 47"
                 + "2C 13 FB";
         DinaMessage message = DinaMessage.of(ByteUtil.hexStringToBytes(a.replace(" ", "")));
-        StartStopData startStopData = parser.parse(message.getData());
+        SegmentEventData startStopData = parser.parse(message.getData());
         Assertions.assertNotNull(startStopData);
     }
 }

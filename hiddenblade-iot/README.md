@@ -11,7 +11,7 @@ functionId|data|status
 0x06|Driving scene|
 0x07|SIM|x
 0x0A|Vehicle|x
-0x97|Start and stop|x
+0x97|Segment event|x
 0xA0|Max GPS|x
-0xA1|Max CAN|
+0xA1|Max CAN|x
 
