@@ -56,6 +56,10 @@ public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
         }
     }
 
+    protected String toHexString(byte[] data, int start, int length) {
+        return ByteUtil.bytesToHexString(ByteUtil.subBytes(data, start, length));
+    }
+
     protected boolean bitFlag(byte data, int bit) {
         return (data & (1 << bit)) > 0;
     }

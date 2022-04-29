@@ -12,6 +12,7 @@ functionId|data|status
 0x07|SIM|x
 0x08|Base station|
 0x09|Simple base station|
+0x10|Param items|\
 0x0A|Vehicle|x
 0x97|Segment event|x
 0x9D|Debug event|x
