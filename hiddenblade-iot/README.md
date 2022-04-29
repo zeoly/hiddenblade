@@ -15,6 +15,7 @@ functionId|data|status
 0x0A|Vehicle|x
 0x97|Segment event|x
 0x9D|Debug event|x
+0x9E|Extend event|\
 0xA0|Max GPS|x
 0xA1|Max CAN|x
 
