@@ -10,8 +10,11 @@ functionId|data|status
 0x05|Heartbeat|
 0x06|Driving scene|
 0x07|SIM|x
+0x08|Base station|
+0x09|Simple base station|
 0x0A|Vehicle|x
 0x97|Segment event|x
+0x9D|Debug event|x
 0xA0|Max GPS|x
 0xA1|Max CAN|x
 
