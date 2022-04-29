@@ -22,9 +22,9 @@ public class SegmentEventDataParser extends AbstractDinaParser<SegmentEventData>
             startStopData.setType(SegmentType.STOP);
         }
         index += 2;
-        startStopData.setTotalMileage(toInt(data, index, 4));
+        startStopData.setTotalMileage(toLong(data, index, 4));
         index += 4;
-        startStopData.setTotalConsumption(toInt(data, index, 4));
+        startStopData.setTotalConsumption(toLong(data, index, 4));
         return startStopData;
     }
 }

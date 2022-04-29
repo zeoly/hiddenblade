@@ -6,9 +6,9 @@ public class SegmentEventData extends GpsData {
 
     private SegmentType type;
 
-    Integer totalMileage;
+    Long totalMileage;
 
-    Integer totalConsumption;
+    Long totalConsumption;
 
     public SegmentType getType() {
         return type;
@@ -18,19 +18,19 @@ public class SegmentEventData extends GpsData {
         this.type = type;
     }
 
-    public Integer getTotalMileage() {
+    public Long getTotalMileage() {
         return totalMileage;
     }
 
-    public void setTotalMileage(Integer totalMileage) {
+    public void setTotalMileage(Long totalMileage) {
         this.totalMileage = totalMileage;
     }
 
-    public Integer getTotalConsumption() {
+    public Long getTotalConsumption() {
         return totalConsumption;
     }
 
-    public void setTotalConsumption(Integer totalConsumption) {
+    public void setTotalConsumption(Long totalConsumption) {
         this.totalConsumption = totalConsumption;
     }
 }
