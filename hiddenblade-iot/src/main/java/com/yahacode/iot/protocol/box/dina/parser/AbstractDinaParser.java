@@ -1,6 +1,8 @@
 package com.yahacode.iot.protocol.box.dina.parser;
 
 import com.yahacode.hiddenblade.tool.utils.ByteUtil;
+import com.yahacode.hiddenblade.tool.utils.GeoUtil;
+import com.yahacode.hiddenblade.tool.utils.MathUtil;
 import com.yahacode.iot.protocol.TerminalDataParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,12 @@ public abstract class AbstractDinaParser<T> implements TerminalDataParser<T> {
 
     protected LocalDateTime getTimestamp(byte[] data) {
         return LocalDateTime.of(toInt(data[3]) + 2000, toInt(data[4]), toInt(data[5]), toInt(data[0]), toInt(data[1]), toInt(data[2])).plusHours(TIME_ZONE);
+    }
+
+    protected double[] toCoordinates(byte[] data, int start) {
+        double lat = MathUtil.precision(0.000001 * toInt(data, start, 4), 6);
+        double lon = MathUtil.precision(0.000001 * toInt(data, start + 4, 4), 6);
+        return GeoUtil.wgs84ToGcj02(lon, lat);
     }
 
     protected int toInt(byte[] data, int start, int length) {

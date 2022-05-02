@@ -9,8 +9,9 @@ public class GpsDataParser extends AbstractDinaParser<GpsData> {
     public GpsData parse(byte[] data) {
         GpsData gpsData = new GpsData();
         gpsData.setTimestamp(getTimestamp(data));
-        gpsData.setLatitude(MathUtil.precision(0.000001 * toInt(data, 6, 4), 6));
-        gpsData.setLongitude(MathUtil.precision(0.000001 * toInt(data, 10, 4), 6));
+        double[] coordinates = toCoordinates(data, 6);
+        gpsData.setLatitude(coordinates[1]);
+        gpsData.setLongitude(coordinates[0]);
         gpsData.setAltitude(toInt(data, 14, 3));
         gpsData.setSpeed(MathUtil.precision(0.1 * toInt(data, 17, 2), 1));
         gpsData.setDirection(toInt(data, 19, 2) / 10);
