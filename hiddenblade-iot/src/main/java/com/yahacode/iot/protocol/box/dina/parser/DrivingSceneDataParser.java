@@ -21,7 +21,7 @@ public class DrivingSceneDataParser extends AbstractDinaParser<DrivingSceneData>
         int totalNumber = drivingSceneData.getPreNumber() * 2 + drivingSceneData.getMidNumber();
         int gpsUnitNumber = totalNumber;
         int accUnitNumber = drivingSceneData.getMidNumber();
-        if (gpsUnitNumber * gpsUnitLength + totalNumber * accUnitLength + 9 == data.length) {
+        if (gpsUnitNumber * gpsUnitLength + totalNumber * accUnitLength + 8 + 1 == data.length) {
             accUnitNumber = totalNumber;
         }
 

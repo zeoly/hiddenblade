@@ -77,4 +77,12 @@ public class DrivingSceneData {
     public void setScenes(List<DrivingScene> scenes) {
         this.scenes = scenes;
     }
+
+    public Double getLongitude() {
+        return this.getScenes().get(preNumber).getLongitude();
+    }
+
+    public Double getLatitude() {
+        return this.getScenes().get(preNumber).getLatitude();
+    }
 }

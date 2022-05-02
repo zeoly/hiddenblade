@@ -20,4 +20,8 @@ functionId|data|status
 0x9E|Extend event|\
 0xA0|Max GPS|x
 0xA1|Max CAN|x
-
+0xA8|Rapid deceleration|x
+0xA9|Rapid acceleration|x
+0xAA|Sharp turn|x
+0xAB|Collision|x
+0xAC|Hard braking|x
