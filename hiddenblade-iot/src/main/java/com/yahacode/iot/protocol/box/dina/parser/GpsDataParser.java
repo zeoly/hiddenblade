@@ -18,23 +18,23 @@ public class GpsDataParser extends AbstractDinaParser<GpsData> {
         gpsData.setSatellites(toInt(data[21]));
         gpsData.setGsmSignal(toInt(data[22]));
         gpsData.setAccStatus(data[23] & 0x01);
-        gpsData.setErrorLog(getErrorLog(data));
+        gpsData.setErrorLog(getErrorLog(data[23]));
         gpsData.setVoltage(MathUtil.precision(0.1 * toInt(data, 24, 2), 1));
         return gpsData;
     }
 
-    private Integer getErrorLog(byte[] data) {
+    public Integer getErrorLog(byte data) {
         int log = 0;
-        if (0x80 == (data[23] & 0x80)) {
+        if (0x80 == (data & 0x80)) {
             log = log + 1;
         }
-        if (0x40 == (data[23] & 0x40)) {
+        if (0x40 == (data & 0x40)) {
             log = log + 2;
         }
-        if (0x20 == (data[23] & 0x20)) {
+        if (0x20 == (data & 0x20)) {
             log = log + 4;
         }
-        if (0x10 == (data[23] & 0x10)) {
+        if (0x10 == (data & 0x10)) {
             log = log + 8;
         }
         return log;

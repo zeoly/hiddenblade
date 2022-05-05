@@ -4,6 +4,12 @@ import com.yahacode.hiddenblade.tool.utils.ByteUtil;
 
 public class DinaMessage {
 
+    public static final int MIN_LENGTH = 14;
+
+    public static final int HEADER = 0xFA;
+
+    public static final int FOOTER = 0xFB;
+
     private Integer header1;
 
     private Integer header2;
