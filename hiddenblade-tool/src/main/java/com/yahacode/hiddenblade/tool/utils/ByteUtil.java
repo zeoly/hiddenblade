@@ -30,4 +30,12 @@ public class ByteUtil {
         }
         return result;
     }
+
+    public static byte parityCheck(byte[] data, int endIndex) {
+        byte parity = 0;
+        for (int i = 0; i <= endIndex; i++) {
+            parity = (byte) (parity ^ data[i]);
+        }
+        return parity;
+    }
 }
