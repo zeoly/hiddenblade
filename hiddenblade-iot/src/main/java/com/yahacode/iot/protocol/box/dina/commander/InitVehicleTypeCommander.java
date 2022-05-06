@@ -1,9 +1,15 @@
 package com.yahacode.iot.protocol.box.dina.commander;
 
+import com.yahacode.hiddenblade.tool.utils.JsonUtil;
 import com.yahacode.iot.protocol.box.dina.FunctionId;
 import com.yahacode.iot.protocol.box.dina.data.VehicleTypeCommand;
 
 public class InitVehicleTypeCommander extends AbstractCommander<VehicleTypeCommand> {
+
+    @Override
+    public VehicleTypeCommand getData(String str) {
+        return JsonUtil.toObj(str, VehicleTypeCommand.class);
+    }
 
     @Override
     public byte[] getCommandBody(VehicleTypeCommand command) {

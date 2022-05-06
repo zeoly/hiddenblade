@@ -11,6 +11,11 @@ public class QueryCommander extends AbstractCommander<BaseCommand> {
     }
 
     @Override
+    public BaseCommand getData(String str) {
+        return null;
+    }
+
+    @Override
     public byte[] getCommandBody(BaseCommand command) {
         return new byte[0];
     }

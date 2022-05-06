@@ -1,9 +1,15 @@
 package com.yahacode.iot.protocol.box.dina.commander;
 
+import com.yahacode.hiddenblade.tool.utils.JsonUtil;
 import com.yahacode.iot.protocol.box.dina.FunctionId;
 import com.yahacode.iot.protocol.box.dina.data.MilesConsCommand;
 
 public class InitMilesConsCommander extends AbstractCommander<MilesConsCommand> {
+
+    @Override
+    public MilesConsCommand getData(String str) {
+        return JsonUtil.toObj(str, MilesConsCommand.class);
+    }
 
     @Override
     public byte[] getCommandBody(MilesConsCommand baseCommand) {
