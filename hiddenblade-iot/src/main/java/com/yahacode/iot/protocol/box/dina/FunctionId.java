@@ -22,13 +22,35 @@ public class FunctionId {
 
     public static final int BASE_STATION_SIMPLE = 0x09;
 
-    public static final int VEHICLE = 0x10;
+    public static final int PARAM_ITEM = 0x10;
+
+    public static final int VEHICLE = 0x0A;
+
+    public static final int SETTING_FEEDBACK = 0x7F;
 
     public static final int QUERY_SETTING_PARAM = 0x93;
 
     public static final int TIME_SYNC = 0x94;
 
     public static final int SEGMENT_EVENT = 0x97;
+
+    public static final int DEBUG_EVENT = 0x9D;
+
+    public static final int EXTEND_EVENT = 0x9E;
+
+    public static final int MAX_GPS = 0xA0;
+
+    public static final int MAX_CAN = 0xA1;
+
+    public static final int RAPID_DECELERATION = 0xA8;
+
+    public static final int RAPID_ACCELERATION = 0xA9;
+
+    public static final int SHARP_TURN = 0xAA;
+
+    public static final int COLLISION = 0xAB;
+
+    public static final int HARD_BRAKING = 0xAC;
 
     public class Query {
 
