@@ -1,12 +1,9 @@
 package com.yahacode.iot.protocol.box.dina.data;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
 public class GpsData {
 
-    @JsonFormat
     private LocalDateTime timestamp;
 
     private Double longitude;

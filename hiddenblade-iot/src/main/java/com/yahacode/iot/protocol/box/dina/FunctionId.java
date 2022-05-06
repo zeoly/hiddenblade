@@ -29,4 +29,25 @@ public class FunctionId {
     public static final int TIME_SYNC = 0x94;
 
     public static final int SEGMENT_EVENT = 0x97;
+
+    public class Query {
+
+        public static final int GPS = 0x30;
+
+        public static final int GPS_PARAM = 0x31;
+
+        public static final int CAN_PARAM = 0x32;
+
+        public static final int HEARTBEAT_PARAM = 0x36;
+
+        public static final int LOW_VOLT_ALERT_PARAM = 0x38;
+
+    }
+
+    public class Setting {
+
+        public static final int INIT_VEHICLE_TYPE = 0x5B;
+
+        public static final int INIT_MILES_CONS = 0x5C;
+    }
 }
