@@ -23,6 +23,38 @@ public class ByteUtil {
         return stringBuffer.toString();
     }
 
+    public static String formatBytes(byte[] bytes) {
+        if (bytes == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        int line = (bytes.length % 16 == 0) ? bytes.length / 16 : bytes.length / 16 + 1;
+        for (int i = 0; i < line; i++) {
+            int length = 16;
+            byte[] lineBytes = new byte[length];
+            if (i == line - 1) {
+                length = bytes.length - length * i;
+            }
+            System.arraycopy(bytes, i * 16, lineBytes, 0, length);
+            String lineHex = bytesToHexString(lineBytes);
+            for (int x = 0; x < lineHex.length(); x += 2) {
+                sb.append(lineHex, x, x + 2).append(" ");
+            }
+            sb.append("    ").append(replaceControlChar(lineBytes)).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private static String replaceControlChar(byte[] data) {
+        for (int i = 0; i < data.length; i++) {
+            if ((data[i] < 32) || (data[i] == 127)) {
+                data[i] = 63;
+            }
+        }
+        return new String(data);
+    }
+
     public static byte[] subBytes(byte[] data, int start, int length) {
         byte[] result = new byte[length];
         if ((null != data) && (start < data.length) && (start + length <= data.length)) {
