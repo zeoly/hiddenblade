@@ -40,7 +40,9 @@ public class JsonbConverter implements AttributeConverter<JsonNode, Object> {
                 log.error("error pg type: {}", ((PGobject) dbData).getType());
             }
         }
-        log.error("error pg object: {}", JsonUtil.toStr(dbData));
+        if (dbData != null) {
+            log.error("error pg object: {}", JsonUtil.toStr(dbData));
+        }
         return JsonUtil.toJsonNode("");
     }
 }
