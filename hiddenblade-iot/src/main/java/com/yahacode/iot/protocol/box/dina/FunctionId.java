@@ -60,6 +60,12 @@ public class FunctionId {
 
         public static final int CAN_PARAM = 0x12;
 
+        public static final int GPRS_PARAM = 0x13;
+
+        public static final int SMS_PARAM = 0x14;
+
+        public static final int APN_PARAM = 0x15;
+
         public static final int HEARTBEAT_PARAM = 0x16;
 
         public static final int LOW_VOLT_ALERT_PARAM = 0x18;
@@ -75,6 +81,12 @@ public class FunctionId {
         public static final int GPS_PARAM = 0x31;
 
         public static final int CAN_PARAM = 0x32;
+
+        public static final int GPRS_PARAM = 0x33;
+
+        public static final int SMS_PARAM = 0x34;
+
+        public static final int APN_PARAM = 0x35;
 
         public static final int HEARTBEAT_PARAM = 0x36;
 

@@ -13,6 +13,9 @@ public class CommanderFactory {
             case FunctionId.Query.GPS:
             case FunctionId.Query.GPS_PARAM:
             case FunctionId.Query.CAN_PARAM:
+            case FunctionId.Query.GPRS_PARAM:
+            case FunctionId.Query.SMS_PARAM:
+            case FunctionId.Query.APN_PARAM:
             case FunctionId.Query.HEARTBEAT_PARAM:
             case FunctionId.Query.LOW_VOLT_ALERT_PARAM:
             case FunctionId.Query.IDLING_PARAM:
