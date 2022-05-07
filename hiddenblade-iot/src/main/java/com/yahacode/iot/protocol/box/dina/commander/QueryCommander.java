@@ -22,6 +22,6 @@ public class QueryCommander extends AbstractCommander<BaseCommand> {
 
     @Override
     public int getCommandId() {
-        return this.getCommandId();
+        return this.commandId;
     }
 }
