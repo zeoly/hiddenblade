@@ -52,6 +52,19 @@ public class FunctionId {
 
     public static final int HARD_BRAKING = 0xAC;
 
+    public class Back {
+
+        public static final int GPS = 0x20;
+
+        public static final int GPS_PARAM = 0x11;
+
+        public static final int CAN_PARAM = 0x12;
+
+        public static final int HEARTBEAT_PARAM = 0x16;
+
+        public static final int LOW_VOLT_ALERT_PARAM = 0x18;
+    }
+
     public class Query {
 
         public static final int GPS = 0x30;
@@ -63,7 +76,6 @@ public class FunctionId {
         public static final int HEARTBEAT_PARAM = 0x36;
 
         public static final int LOW_VOLT_ALERT_PARAM = 0x38;
-
     }
 
     public class Setting {
