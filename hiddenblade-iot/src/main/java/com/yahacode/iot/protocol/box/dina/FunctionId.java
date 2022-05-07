@@ -79,6 +79,8 @@ public class FunctionId {
         public static final int HEARTBEAT_PARAM = 0x36;
 
         public static final int LOW_VOLT_ALERT_PARAM = 0x38;
+
+        public static final int IDLING_PARAM = 0x47;
     }
 
     public class Setting {

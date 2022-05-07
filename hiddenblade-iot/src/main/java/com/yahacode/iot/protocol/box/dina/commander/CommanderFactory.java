@@ -15,6 +15,7 @@ public class CommanderFactory {
             case FunctionId.Query.CAN_PARAM:
             case FunctionId.Query.HEARTBEAT_PARAM:
             case FunctionId.Query.LOW_VOLT_ALERT_PARAM:
+            case FunctionId.Query.IDLING_PARAM:
                 return new QueryCommander(functionId);
             default:
                 return null;
