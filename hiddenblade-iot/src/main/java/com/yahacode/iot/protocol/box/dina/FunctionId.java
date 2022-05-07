@@ -26,8 +26,6 @@ public class FunctionId {
 
     public static final int VEHICLE = 0x0A;
 
-    public static final int SETTING_FEEDBACK = 0x7F;
-
     public static final int QUERY_SETTING_PARAM = 0x93;
 
     public static final int TIME_SYNC = 0x94;
@@ -52,6 +50,8 @@ public class FunctionId {
 
     public static final int HARD_BRAKING = 0xAC;
 
+    public static final int STATUS = 0xBD;
+
     public class Back {
 
         public static final int GPS = 0x20;
@@ -63,6 +63,9 @@ public class FunctionId {
         public static final int HEARTBEAT_PARAM = 0x16;
 
         public static final int LOW_VOLT_ALERT_PARAM = 0x18;
+
+        public static final int SETTING = 0x7F;
+
     }
 
     public class Query {

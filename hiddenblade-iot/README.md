@@ -27,7 +27,7 @@ functionId|data|parse|respond
 0xAA|Sharp turn|x|Common
 0xAB|Collision(Driving scene)|x|Common
 0xAC|Hard braking(Driving scene)|x|Common
-0xBD|Status||Common
+0xBD|Status|x|Common
 
 # query command
 
@@ -51,3 +51,9 @@ functionId|data|back
 0x4C||0x2C
 0x4D||0x2D
 0x77||0x78
+
+# setting command
+
+functionId|data|back
+-|-|-
+0x||0x7F
