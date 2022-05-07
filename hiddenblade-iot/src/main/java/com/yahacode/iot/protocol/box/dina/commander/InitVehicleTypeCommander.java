@@ -7,8 +7,12 @@ import com.yahacode.iot.protocol.box.dina.data.VehicleTypeCommand;
 public class InitVehicleTypeCommander extends AbstractCommander<VehicleTypeCommand> {
 
     @Override
-    public VehicleTypeCommand getData(String str) {
-        return JsonUtil.toObj(str, VehicleTypeCommand.class);
+    public VehicleTypeCommand getData(String deviceId, String str) {
+        VehicleTypeCommand vehicleTypeCommand = JsonUtil.toObj(str, VehicleTypeCommand.class);
+        if (vehicleTypeCommand != null) {
+            vehicleTypeCommand.setDeviceId(deviceId);
+        }
+        return vehicleTypeCommand;
     }
 
     @Override

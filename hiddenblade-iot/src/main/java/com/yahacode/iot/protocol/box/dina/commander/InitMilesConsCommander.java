@@ -7,8 +7,12 @@ import com.yahacode.iot.protocol.box.dina.data.MilesConsCommand;
 public class InitMilesConsCommander extends AbstractCommander<MilesConsCommand> {
 
     @Override
-    public MilesConsCommand getData(String str) {
-        return JsonUtil.toObj(str, MilesConsCommand.class);
+    public MilesConsCommand getData(String deviceId, String str) {
+        MilesConsCommand milesConsCommand = JsonUtil.toObj(str, MilesConsCommand.class);
+        if (milesConsCommand != null) {
+            milesConsCommand.setDeviceId(deviceId);
+        }
+        return milesConsCommand;
     }
 
     @Override

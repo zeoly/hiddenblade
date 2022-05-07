@@ -31,7 +31,7 @@ public abstract class AbstractCommander<T extends BaseCommand> implements Termin
         return command;
     }
 
-    public abstract T getData(String str);
+    public abstract T getData(String deviceId, String str);
 
     public abstract byte[] getCommandBody(T command);
 

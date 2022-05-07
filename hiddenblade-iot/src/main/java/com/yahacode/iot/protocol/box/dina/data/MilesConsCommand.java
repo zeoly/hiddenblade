@@ -6,12 +6,8 @@ public class MilesConsCommand extends BaseCommand {
 
     Long InitFuelConsumption = 0L;
 
-    public MilesConsCommand() {
-    }
-
-    public MilesConsCommand(Long initMileage, Long initFuelConsumption) {
-        InitMileage = initMileage;
-        InitFuelConsumption = initFuelConsumption;
+    public MilesConsCommand(String deviceId) {
+        super(deviceId);
     }
 
     public Long getInitMileage() {

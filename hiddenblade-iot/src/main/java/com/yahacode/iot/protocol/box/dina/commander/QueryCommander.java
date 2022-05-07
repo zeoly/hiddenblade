@@ -11,8 +11,8 @@ public class QueryCommander extends AbstractCommander<BaseCommand> {
     }
 
     @Override
-    public BaseCommand getData(String str) {
-        return null;
+    public BaseCommand getData(String deviceId, String str) {
+        return new BaseCommand(deviceId);
     }
 
     @Override
