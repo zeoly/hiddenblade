@@ -56,4 +56,18 @@ public class StringUtil extends StringUtils {
         }
         return String.format("%02x", i).toUpperCase();
     }
+
+    public static String toHex4(int i) {
+        if (i > 65535 || i < 0) {
+            return null;
+        }
+        return String.format("%04x", i).toUpperCase();
+    }
+
+    public static String toHex8(long i) {
+        if (i > 4294967295L || i < 0) {
+            return null;
+        }
+        return String.format("%08x", i).toUpperCase();
+    }
 }
