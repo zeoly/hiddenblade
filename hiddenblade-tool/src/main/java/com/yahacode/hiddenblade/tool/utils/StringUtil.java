@@ -49,4 +49,11 @@ public class StringUtil extends StringUtils {
         JsonNode jsonNode = JsonUtil.toJsonNode(str);
         return jsonNode != null;
     }
+
+    public static String toHex2(int i) {
+        if (i > 255 || i < 0) {
+            return null;
+        }
+        return String.format("%02x", i).toUpperCase();
+    }
 }
