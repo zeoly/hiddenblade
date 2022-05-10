@@ -51,7 +51,7 @@ public class DateUtil {
     public static Date parse(String str, String pattern) {
         try {
             DateFormat df = new SimpleDateFormat(pattern);
-            return df.parse(pattern);
+            return df.parse(str);
         } catch (ParseException e) {
             log.warn("parse date string error: {}, pattern: {}", str, pattern, e);
             return null;
