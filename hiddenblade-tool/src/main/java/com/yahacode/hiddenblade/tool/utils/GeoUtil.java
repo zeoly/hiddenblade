@@ -6,6 +6,8 @@ public class GeoUtil {
 
     private static double ee = 0.00669342162296594323;
 
+    private static double EARTH_RADIUS = 6378.137;
+
     public static double[] wgs84ToGcj02(double lon, double lat) {
         if (outOfChina(lat, lon)) {
             return new double[]{lat, lon};
@@ -21,6 +23,28 @@ public class GeoUtil {
         double mgLat = lat + dLat;
         double mgLon = lon + dLon;
         return new double[]{MathUtil.precision(mgLon, 6), MathUtil.precision(mgLat, 6)};
+    }
+
+    public static double[] gcj02ToWgs84(double lon, double lat) {
+        double d = 0.0000001;
+        double longitude = lon;
+        double latitude = lat;
+        double[] transform;
+        do {
+            transform = wgs84ToGcj02(longitude, latitude);
+            longitude += lon - transform[0];
+            latitude += lat - transform[1];
+        } while (lon - transform[0] > d || lat - transform[1] > d);
+        return new double[]{MathUtil.precision(longitude, 6), MathUtil.precision(latitude, 6)};
+    }
+
+    public static double[] bd09ToGcj02(double lon, double lat) {
+        double x = lon - 0.0065, y = lat - 0.006;
+        double z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * Math.PI * 3000.0 / 180.0);
+        double theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * Math.PI * 3000.0 / 180.0);
+        double gcjLon = z * Math.cos(theta);
+        double gcjLat = z * Math.sin(theta);
+        return new double[]{MathUtil.precision(gcjLon, 6), MathUtil.precision(gcjLat, 6)};
     }
 
     private static double transformLat(double x, double y) {
@@ -50,5 +74,19 @@ public class GeoUtil {
 
     public static boolean inChina(double lon, double lat) {
         return !outOfChina(lon, lat);
+    }
+
+    public static double distance(double lon1, double lat1, double lon2, double lat2) {
+        double a = rad(lat1) - rad(lat2);
+        double b = rad(lon1) - rad(lon2);
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.pow(Math.sin(b / 2), 2)));
+        s = s * EARTH_RADIUS;
+        s = Math.round(s * 10000d) / 10000d;
+        s = s * 1000;
+        return s;
+    }
+
+    private static double rad(double d) {
+        return d * Math.PI / 180.0;
     }
 }
