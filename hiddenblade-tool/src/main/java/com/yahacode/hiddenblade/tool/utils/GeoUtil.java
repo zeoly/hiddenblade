@@ -86,6 +86,17 @@ public class GeoUtil {
         return s;
     }
 
+    public static double distance(String location1, String location2) {
+        double[] coordinates1 = toCoordinates(location1);
+        double[] coordinates2 = toCoordinates(location2);
+        return distance(coordinates1[0], coordinates1[1], coordinates2[0], coordinates2[1]);
+    }
+
+    private static double[] toCoordinates(String location) {
+        String[] coordinates = location.split(",");
+        return new double[]{Double.valueOf(coordinates[0]), Double.valueOf(coordinates[1])};
+    }
+
     private static double rad(double d) {
         return d * Math.PI / 180.0;
     }
