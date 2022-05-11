@@ -40,7 +40,7 @@ public class GeoUtil {
         return ret;
     }
 
-    public static boolean outOfChina(double lat, double lon) {
+    public static boolean outOfChina(double lon, double lat) {
         if (lon < 72.004 || lon > 137.8347)
             return true;
         if (lat < 0.8293 || lat > 55.8271)
@@ -48,4 +48,7 @@ public class GeoUtil {
         return false;
     }
 
+    public static boolean inChina(double lon, double lat) {
+        return !outOfChina(lon, lat);
+    }
 }
