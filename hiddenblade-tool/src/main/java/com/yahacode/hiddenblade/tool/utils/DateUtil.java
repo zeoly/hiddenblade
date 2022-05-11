@@ -1,5 +1,6 @@
 package com.yahacode.hiddenblade.tool.utils;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateUtil {
+public class DateUtil extends DateUtils {
 
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
 
@@ -66,37 +67,6 @@ public class DateUtil {
         return parse(str, PATTERN_FULL_SHORT);
     }
 
-    public static Date add(Date date, int field, int amount) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(field, amount);
-        return calendar.getTime();
-    }
-
-    public static Date addYear(Date date, int amount) {
-        return add(date, Calendar.YEAR, amount);
-    }
-
-    public static Date addMonth(Date date, int amount) {
-        return add(date, Calendar.MONTH, amount);
-    }
-
-    public static Date addDay(Date date, int amount) {
-        return add(date, Calendar.DAY_OF_MONTH, amount);
-    }
-
-    public static Date addHour(Date date, int amount) {
-        return add(date, Calendar.HOUR_OF_DAY, amount);
-    }
-
-    public static Date addMinute(Date date, int amount) {
-        return add(date, Calendar.MINUTE, amount);
-    }
-
-    public static Date addSecond(Date date, int amount) {
-        return add(date, Calendar.SECOND, amount);
-    }
-
     public static Date atTime(Date date, int hour, int minute, int second, int millisecond) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -116,7 +86,7 @@ public class DateUtil {
     }
 
     public static boolean isAround(Date date, Date target, int second) {
-        if (date.before(addSecond(target, -second)) || date.after(addSecond(target, second))) {
+        if (date.before(addSeconds(target, -second)) || date.after(addSeconds(target, second))) {
             return false;
         } else {
             return true;
@@ -136,9 +106,5 @@ public class DateUtil {
 
     public static boolean isPM(Date date) {
         return !isAM(date);
-    }
-
-    public static boolean isSameDay(Date date1, Date date2) {
-        return formatDate(date1).equals(formatDate(date2));
     }
 }
