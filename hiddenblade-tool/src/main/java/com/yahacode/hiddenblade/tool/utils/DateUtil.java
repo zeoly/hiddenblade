@@ -68,8 +68,7 @@ public class DateUtil extends DateUtils {
     }
 
     public static Date atTime(Date date, int hour, int minute, int second, int millisecond) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        Calendar calendar = toCalendar(date);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
@@ -78,7 +77,7 @@ public class DateUtil extends DateUtils {
     }
 
     public static Date atStartOfDay(Date date) {
-        return atTime(date, 0, 0, 0, 0);
+        return truncate(date, Calendar.DAY_OF_MONTH);
     }
 
     public static Date atEndOfDay(Date date) {
@@ -94,8 +93,7 @@ public class DateUtil extends DateUtils {
     }
 
     public static boolean isAM(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        Calendar calendar = toCalendar(date);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (hour >= 0 && hour <= 11) {
             return true;
