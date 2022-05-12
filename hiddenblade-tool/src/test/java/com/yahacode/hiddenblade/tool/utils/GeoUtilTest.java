@@ -12,14 +12,20 @@ class GeoUtilTest {
     }
 
     @Test
+    void gcj02ToBd09() {
+        double[] doubles = GeoUtil.gcj02ToBd09(116.406313, 39.924322);
+        Assertions.assertNotNull(doubles);
+    }
+
+    @Test
     void distance() {
-        double distance = GeoUtil.distance(116.406351, 39.924285, 116.825419,39.943758);
+        double distance = GeoUtil.distance(116.406351, 39.924285, 116.825419, 39.943758);
         Assertions.assertNotNull(distance);
     }
 
     @Test
     void inChina() {
-        Assertions.assertTrue(GeoUtil.inChina(73.549032,39.376793));
+        Assertions.assertTrue(GeoUtil.inChina(73.549032, 39.376793));
         Assertions.assertFalse(GeoUtil.inChina(0.0, 0.0));
     }
 }

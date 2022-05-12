@@ -52,6 +52,15 @@ public class GeoUtil {
         return new double[]{MathUtil.precision(gcjLon, 6), MathUtil.precision(gcjLat, 6)};
     }
 
+    public static double[] gcj02ToBd09(double lon, double lat) {
+        double x = lon, y = lat;
+        double z = Math.sqrt(x * x + y * y) + 0.00002 * Math.sin(y * Math.PI * 3000.0 / 180.0);
+        double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * Math.PI * 3000.0 / 180.0);
+        double bdLon = z * Math.cos(theta) + 0.0065;
+        double bdLat = z * Math.sin(theta) + 0.006;
+        return new double[]{MathUtil.precision(bdLon, 6), MathUtil.precision(bdLat, 6)};
+    }
+
     private static double transformLat(double x, double y) {
         double ret = -100.0 + 2.0 * x + 3.0 * y + 0.2 * y * y + 0.1 * x * y
                 + 0.2 * Math.sqrt(Math.abs(x));
