@@ -36,7 +36,7 @@ public class AlertDataParser extends AbstractDinaParser<AlertData> {
         alertData.setSensorFault(bitFlag(data[index], 2));
         alertData.setGpsFault(bitFlag(data[index], 3));
         index++;
-        if (data.length > index) {
+        if (data.length == index + 6) {
             alertData.setAccelerationX(MathUtil.precision(0.1 * toSignedInt(data, index, 2), 1));
             index += 2;
             alertData.setAccelerationY(MathUtil.precision(0.1 * toSignedInt(data, index, 2), 1));
@@ -44,7 +44,7 @@ public class AlertDataParser extends AbstractDinaParser<AlertData> {
             alertData.setAccelerationZ(MathUtil.precision(0.1 * toSignedInt(data, index, 2), 1));
             index += 2;
         }
-        if (data.length > index) {
+        if (data.length == index + 2) {
             alertData.setIdleDuration(toInt(data, index, 2));
         }
         return alertData;
