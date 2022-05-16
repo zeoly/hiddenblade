@@ -70,4 +70,11 @@ public class ByteUtil {
         }
         return parity;
     }
+
+    public static String getEighthBit(int b) {
+        b |= 256;
+        String str = Integer.toBinaryString(b);
+        int len = str.length();
+        return str.substring(len - 8, len);
+    }
 }
