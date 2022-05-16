@@ -50,6 +50,10 @@ public class FunctionId {
 
     public static final int HARD_BRAKING = 0xAC;
 
+    public static final int EV_CAN = 0xB6;
+
+    public static final int EV_MAX_CAN = 0xBA;
+
     public static final int STATUS = 0xBD;
 
     public class Back {
