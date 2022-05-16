@@ -50,6 +50,7 @@ public class CanDataParser extends AbstractDinaParser<List<CanData>> {
         }
         if ((data[6] & 0x10) == 0x10) {
             canData.setLockStatus(buildLockStatus(packet[index]));
+            index++;
         }
         if ((data[6] & 0x08) == 0x08) {
             canData.setLightStatus(buildLightStatus(packet[index]));

@@ -27,6 +27,8 @@ functionId|data|parse|respond
 0xAA|Sharp turn|x|Common
 0xAB|Collision(Driving scene)|x|Common
 0xAC|Hard braking(Driving scene)|x|Common
+0xB6|EV CAN|x|Common
+0xBA|EV max CAN|x|Common
 0xBD|Status|x|Common
 
 # query
