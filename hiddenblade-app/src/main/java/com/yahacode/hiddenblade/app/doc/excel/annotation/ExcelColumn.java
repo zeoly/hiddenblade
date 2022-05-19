@@ -44,7 +44,7 @@ public @interface ExcelColumn {
      *
      * @return pattern
      */
-    String dateTimePattern() default "yyyy-MM-dd HH:mm:ss";
+    String dateTimePattern() default "";
 
     /**
      * sheet header style
