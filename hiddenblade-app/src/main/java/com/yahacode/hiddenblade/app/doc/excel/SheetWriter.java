@@ -37,6 +37,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Excel sheet writer/exporter
+ *
+ * @author zengyongli
+ * @since 2022/05/20
+ */
 public class SheetWriter {
 
     private static final Logger log = LoggerFactory.getLogger(SheetWriter.class);
@@ -72,13 +78,8 @@ public class SheetWriter {
     public void fill(List<? extends Object> list) throws Exception {
         int rowNum = sheet.getPhysicalNumberOfRows();
         for (int i = 0; i < list.size(); i++) {
-            try {
-                Row row = sheet.createRow(rowNum + i);
-                createRowCells(row, list.get(i), sheetContext);
-            } catch (Exception e) {
-                log.error("error", e);
-                throw e;
-            }
+            Row row = sheet.createRow(rowNum + i);
+            createRowCells(row, list.get(i), sheetContext);
         }
     }
 
