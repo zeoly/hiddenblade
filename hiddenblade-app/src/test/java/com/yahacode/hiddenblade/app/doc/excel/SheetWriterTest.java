@@ -15,12 +15,26 @@ class SheetWriterTest {
     @Test
     void write() throws Exception {
         List<TestModel> list = new ArrayList<>();
-        list.add(new TestModel("aasdf", 3423, new Date(), LocalDateTime.now(), 5.555, LocalDate.now(), LocalTime.now()));
-        list.add(new TestModel("阿斯蒂芬", 12312321, new Date(), LocalDateTime.now(), 4.3423432, LocalDate.now(), LocalTime.now()));
+        list.add(new TestModel("pare","aasdf", 3423, new Date(), LocalDateTime.now(), 5.555, LocalDate.now(), LocalTime.now()));
+        list.add(new TestModel("parent","阿斯蒂芬", 12312321, new Date(), LocalDateTime.now(), 4.3423432, LocalDate.now(), LocalTime.now()));
         SheetWriter.write("文件测试", list, TestModel.class);
     }
 
-    class TestModel {
+    class BaseModel {
+
+        @ExcelColumn(order = 9, name = "父类")
+        private String parent;
+
+        public String getParent() {
+            return parent;
+        }
+
+        public void setParent(String parent) {
+            this.parent = parent;
+        }
+    }
+
+    class TestModel extends BaseModel {
 
         @ExcelColumn(name = "第二列", order = 2)
         String a;
@@ -43,7 +57,10 @@ class SheetWriterTest {
         @ExcelColumn(order = 8)
         LocalTime localTime;
 
-        public TestModel(String a, Integer b, Date date, LocalDateTime localDateTime, Double dd, LocalDate localDate, LocalTime localTime) {
+
+
+        public TestModel(String parent, String a, Integer b, Date date, LocalDateTime localDateTime, Double dd, LocalDate localDate, LocalTime localTime) {
+            super.parent = parent;
             this.a = a;
             this.b = b;
             this.date = date;

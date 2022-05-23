@@ -189,33 +189,36 @@ public class SheetWriter {
         Map<Integer, CellStyle> cellStyleMap = new LinkedHashMap<>();
         List<Integer> keyList = new ArrayList<>();
         SheetContext context = new SheetContext();
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            ExcelColumn column = field.getAnnotation(ExcelColumn.class);
-            if (column != null) {
-                log.info("read column: {}, name:{}, order:{}", field.getName(), column.name(), column.order());
-                if (keyList.contains(column.order())) {
-                    throw new RuntimeException("order collision: " + column.order());
+        while (clazz != null) {
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                ExcelColumn column = field.getAnnotation(ExcelColumn.class);
+                if (column != null) {
+                    log.info("read column: {}, name:{}, order:{}", field.getName(), column.name(), column.order());
+                    if (keyList.contains(column.order())) {
+                        throw new RuntimeException("order collision: " + column.order());
+                    }
+                    memberMap.put(column.order(), field);
+                    headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
+                    cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
+                    keyList.add(column.order());
                 }
-                memberMap.put(column.order(), field);
-                headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
-                cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
-                keyList.add(column.order());
             }
-        }
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method method : methods) {
-            ExcelColumn column = method.getAnnotation(ExcelColumn.class);
-            if (column != null) {
-                log.info("read column: {}, name:{}, order:{}", method.getName(), column.name(), column.order());
-                if (keyList.contains(column.order())) {
-                    throw new RuntimeException("order collision: " + column.order());
+            Method[] methods = clazz.getDeclaredMethods();
+            for (Method method : methods) {
+                ExcelColumn column = method.getAnnotation(ExcelColumn.class);
+                if (column != null) {
+                    log.info("read column: {}, name:{}, order:{}", method.getName(), column.name(), column.order());
+                    if (keyList.contains(column.order())) {
+                        throw new RuntimeException("order collision: " + column.order());
+                    }
+                    memberMap.put(column.order(), method);
+                    headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
+                    cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
+                    keyList.add(column.order());
                 }
-                memberMap.put(column.order(), method);
-                headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
-                cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
-                keyList.add(column.order());
             }
+            clazz = clazz.getSuperclass();
         }
         Collections.sort(keyList);
         for (Integer key : keyList) {
