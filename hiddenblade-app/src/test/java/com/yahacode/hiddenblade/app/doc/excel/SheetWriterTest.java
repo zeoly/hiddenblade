@@ -15,8 +15,8 @@ class SheetWriterTest {
     @Test
     void write() throws Exception {
         List<TestModel> list = new ArrayList<>();
-        list.add(new TestModel("pare","aasdf", 3423, new Date(), LocalDateTime.now(), 5.555, LocalDate.now(), LocalTime.now()));
-        list.add(new TestModel("parent","阿斯蒂芬", 12312321, new Date(), LocalDateTime.now(), 4.3423432, LocalDate.now(), LocalTime.now()));
+        list.add(new TestModel(null,"aasdf", 3423, new Date(), LocalDateTime.now(), 5.555, LocalDate.now(), LocalTime.now()));
+        list.add(new TestModel("parent",null, 12312321, new Date(), LocalDateTime.now(), 4.3423432, LocalDate.now(), LocalTime.now()));
         SheetWriter.write("文件测试", list, TestModel.class);
     }
 

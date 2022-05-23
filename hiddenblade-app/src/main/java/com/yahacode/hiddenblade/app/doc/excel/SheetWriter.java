@@ -148,7 +148,9 @@ public class SheetWriter {
                 objValue = method.invoke(obj);
             }
 
-            if (objValue instanceof String) {
+            if (objValue == null) {
+                cell.setBlank();
+            } else if (objValue instanceof String) {
                 cell.setCellValue((String) objValue);
             } else if (objValue instanceof Integer) {
                 cell.setCellValue((int) objValue);
