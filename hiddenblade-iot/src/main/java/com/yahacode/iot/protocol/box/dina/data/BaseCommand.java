@@ -4,6 +4,9 @@ public class BaseCommand {
 
     String deviceId;
 
+    public BaseCommand() {
+    }
+
     public BaseCommand(String deviceId) {
         this.deviceId = deviceId;
     }

@@ -12,6 +12,9 @@ public class VehicleTypeCommand extends BaseCommand {
 
     Double capacity = 1.6;
 
+    public VehicleTypeCommand() {
+    }
+
     public VehicleTypeCommand(String deviceId) {
         super(deviceId);
     }
