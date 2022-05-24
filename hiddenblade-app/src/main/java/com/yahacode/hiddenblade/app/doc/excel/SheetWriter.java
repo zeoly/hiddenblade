@@ -30,12 +30,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Excel sheet writer/exporter
@@ -53,13 +50,19 @@ public class SheetWriter {
 
     private SXSSFSheet sheet;
 
-    private SheetContext sheetContext;
+    private SheetContext context;
+
+    private List<CellStyle> headerStyles = new LinkedList<>();
+
+    private List<CellStyle> cellStyles = new LinkedList<>();
 
     private SheetWriter(String fileName, SXSSFWorkbook workbook, SXSSFSheet sheet, SheetContext sheetContext) {
         this.fileName = fileName;
         this.workbook = workbook;
         this.sheet = sheet;
-        this.sheetContext = sheetContext;
+        this.context = sheetContext;
+        createStyle();
+        createHeader();
     }
 
     public static SheetWriter open(String fileName, Class clazz) {
@@ -69,9 +72,7 @@ public class SheetWriter {
     public static SheetWriter open(String fileName, String sheetName, Class clazz) {
         SXSSFWorkbook wb = new SXSSFWorkbook();
         SXSSFSheet sheet = wb.createSheet(sheetName);
-        SheetContext context = buildContext(wb, clazz);
-        setColumnWidth(sheet, context);
-        createHeader(sheet, context);
+        SheetContext context = SheetContext.forExport(clazz);
         return new SheetWriter(fileName, wb, sheet, context);
     }
 
@@ -79,7 +80,7 @@ public class SheetWriter {
         int rowNum = sheet.getPhysicalNumberOfRows();
         for (int i = 0; i < list.size(); i++) {
             Row row = sheet.createRow(rowNum + i);
-            createRowCells(row, list.get(i), sheetContext);
+            createRowCells(row, list.get(i));
         }
     }
 
@@ -88,6 +89,7 @@ public class SheetWriter {
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + ".xlsx");
         ServletOutputStream out = response.getOutputStream();
+        setColumnWidth();
         workbook.write(out);
         workbook.dispose();
         out.close();
@@ -95,6 +97,7 @@ public class SheetWriter {
 
     public void write() throws IOException {
         try (OutputStream fileOut = new FileOutputStream(fileName + ".xlsx")) {
+            setColumnWidth();
             workbook.write(fileOut);
             workbook.dispose();
         }
@@ -120,18 +123,27 @@ public class SheetWriter {
         writer.write();
     }
 
-    private static void createHeader(SXSSFSheet sheet, SheetContext context) {
+    private void createStyle() {
+        for (int i = 0; i < context.getMembers().size(); i++) {
+            AccessibleObject accessibleObject = context.getMembers().get(i);
+            ExcelColumn annotation = accessibleObject.getAnnotation(ExcelColumn.class);
+            headerStyles.add(buildCellStyle(annotation.headerStyle()));
+            cellStyles.add(buildCellStyle(annotation.cellStyle()));
+        }
+    }
+
+    private void createHeader() {
         SXSSFRow row = sheet.createRow(0);
         List<AccessibleObject> members = context.getMembers();
         for (int i = 0; i < members.size(); i++) {
             SXSSFCell cell = row.createCell(i);
             ExcelColumn column = members.get(i).getAnnotation(ExcelColumn.class);
             cell.setCellValue(StringUtil.isEmpty(column.name()) ? getName(members.get(i)) : column.name());
-            cell.setCellStyle(context.getHeaderStyles().get(i));
+            cell.setCellStyle(headerStyles.get(i));
         }
     }
 
-    private static void createRowCells(Row row, Object obj, SheetContext context) throws Exception {
+    private void createRowCells(Row row, Object obj) throws Exception {
         List<AccessibleObject> members = context.getMembers();
         for (int i = 0; i < members.size(); i++) {
             Cell cell = row.createCell(i);
@@ -140,11 +152,9 @@ public class SheetWriter {
             Object objValue = null;
             if (accessibleObject instanceof Field) {
                 Field field = (Field) accessibleObject;
-                field.setAccessible(true);
                 objValue = field.get(obj);
             } else if (accessibleObject instanceof Method) {
                 Method method = (Method) accessibleObject;
-                method.setAccessible(true);
                 objValue = method.invoke(obj);
             }
 
@@ -173,69 +183,26 @@ public class SheetWriter {
             } else {
                 cell.setCellValue(JsonUtil.toStr(objValue));
             }
-            cell.setCellStyle(context.getCellStyles().get(i));
+            cell.setCellStyle(cellStyles.get(i));
         }
-
     }
 
-    private static void setColumnWidth(SXSSFSheet sheet, SheetContext context) {
+    private void setColumnWidth() {
+        sheet.trackAllColumnsForAutoSizing();
         for (int i = 0; i < context.getMembers().size(); i++) {
             ExcelColumn column = context.getMembers().get(i).getAnnotation(ExcelColumn.class);
-            sheet.setColumnWidth(i, column.width() * 256);
+            if (column.width() == -1) {
+                sheet.autoSizeColumn(i, true);
+            } else {
+                sheet.setColumnWidth(i, column.width() * 256);
+            }
         }
     }
 
-    private static SheetContext buildContext(SXSSFWorkbook wb, Class clazz) {
-        Map<Integer, AccessibleObject> memberMap = new LinkedHashMap<>();
-        Map<Integer, CellStyle> headStyleMap = new LinkedHashMap<>();
-        Map<Integer, CellStyle> cellStyleMap = new LinkedHashMap<>();
-        List<Integer> keyList = new ArrayList<>();
-        SheetContext context = new SheetContext();
-        while (clazz != null) {
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                ExcelColumn column = field.getAnnotation(ExcelColumn.class);
-                if (column != null) {
-                    log.info("read column: {}, name:{}, order:{}", field.getName(), column.name(), column.order());
-                    if (keyList.contains(column.order())) {
-                        throw new RuntimeException("order collision: " + column.order());
-                    }
-                    memberMap.put(column.order(), field);
-                    headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
-                    cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
-                    keyList.add(column.order());
-                }
-            }
-            Method[] methods = clazz.getDeclaredMethods();
-            for (Method method : methods) {
-                ExcelColumn column = method.getAnnotation(ExcelColumn.class);
-                if (column != null) {
-                    log.info("read column: {}, name:{}, order:{}", method.getName(), column.name(), column.order());
-                    if (keyList.contains(column.order())) {
-                        throw new RuntimeException("order collision: " + column.order());
-                    }
-                    memberMap.put(column.order(), method);
-                    headStyleMap.put(column.order(), buildCellStyle(wb, column.headerStyle()));
-                    cellStyleMap.put(column.order(), buildCellStyle(wb, column.cellStyle()));
-                    keyList.add(column.order());
-                }
-            }
-            clazz = clazz.getSuperclass();
-        }
-        Collections.sort(keyList);
-        for (Integer key : keyList) {
-            context.getMembers().add(memberMap.get(key));
-            context.getHeaderStyles().add(headStyleMap.get(key));
-            context.getCellStyles().add(cellStyleMap.get(key));
-        }
-        log.info("read column finish, found {} columns", context.getMembers().size());
-        return context;
-    }
-
-    private static CellStyle buildCellStyle(SXSSFWorkbook wb, Style style) {
-        CellStyle cellStyle = wb.createCellStyle();
+    private CellStyle buildCellStyle(Style style) {
+        CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setAlignment(style.alignment());
-        Font font = wb.createFont();
+        Font font = workbook.createFont();
         font.setFontHeightInPoints(style.fontSize());
         font.setBold(style.bold());
         cellStyle.setFont(font);
@@ -250,7 +217,7 @@ public class SheetWriter {
         return cellStyle;
     }
 
-    private static String getName(AccessibleObject accessibleObject) {
+    private String getName(AccessibleObject accessibleObject) {
         if (accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
             return field.getName();

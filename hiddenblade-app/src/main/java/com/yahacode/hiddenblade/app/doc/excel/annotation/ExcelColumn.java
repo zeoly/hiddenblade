@@ -37,7 +37,7 @@ public @interface ExcelColumn {
      *
      * @return column width
      */
-    int width() default 20;
+    int width() default -1;
 
     /**
      * date-time format pattern
@@ -59,4 +59,11 @@ public @interface ExcelColumn {
      * @return cell style
      */
     Style cellStyle() default @Style(alignment = HorizontalAlignment.LEFT);
+
+    /**
+     * column for export/import
+     *
+     * @return purpose
+     */
+    ColumnPurpose purpose() default ColumnPurpose.BOTH;
 }
