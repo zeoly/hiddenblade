@@ -65,7 +65,7 @@ public class SheetReader {
             for (int j = 0; j <= row.getLastCellNum(); j++) {
                 XSSFCell cell = row.getCell(j);
                 AccessibleObject accessibleObject = context.getMembers().get(j);
-                if (cell == null || accessibleObject == null) {
+                if (cell == null || accessibleObject == null || cell.getCellType() == CellType.BLANK) {
                     continue;
                 } else if (accessibleObject instanceof Field) {
                     Field field = (Field) accessibleObject;
