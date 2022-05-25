@@ -26,11 +26,11 @@ public @interface ExcelColumn {
     String name() default "";
 
     /**
-     * column order, must not be duplicated
+     * zero-based column index, must not be duplicated
      *
-     * @return column order
+     * @return column index
      */
-    int order();
+    int index();
 
     /**
      * column width, char unit

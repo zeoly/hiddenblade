@@ -30,9 +30,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Excel sheet writer/exporter
@@ -52,16 +56,16 @@ public class SheetWriter {
 
     private SheetContext context;
 
-    private List<CellStyle> headerStyles = new LinkedList<>();
+    private Map<Integer, CellStyle> headerStyles = new HashMap<>();
 
-    private List<CellStyle> cellStyles = new LinkedList<>();
+    private Map<Integer, CellStyle> cellStyles = new HashMap<>();
 
     private SheetWriter(String fileName, SXSSFWorkbook workbook, SXSSFSheet sheet, SheetContext sheetContext) {
         this.fileName = fileName;
         this.workbook = workbook;
         this.sheet = sheet;
         this.context = sheetContext;
-        createStyle();
+        prepareStyle();
         createHeader();
     }
 
@@ -123,32 +127,31 @@ public class SheetWriter {
         writer.write();
     }
 
-    private void createStyle() {
-        for (int i = 0; i < context.getMembers().size(); i++) {
-            AccessibleObject accessibleObject = context.getMembers().get(i);
+    private void prepareStyle() {
+        Set<Integer> keySet = context.getMembers().keySet();
+        for (Integer key : keySet) {
+            AccessibleObject accessibleObject = context.getMembers().get(key);
             ExcelColumn annotation = accessibleObject.getAnnotation(ExcelColumn.class);
-            headerStyles.add(buildCellStyle(annotation.headerStyle()));
-            cellStyles.add(buildCellStyle(annotation.cellStyle()));
+            headerStyles.put(key, buildCellStyle(annotation.headerStyle()));
+            cellStyles.put(key, buildCellStyle(annotation.cellStyle()));
         }
     }
 
     private void createHeader() {
         SXSSFRow row = sheet.createRow(0);
-        List<AccessibleObject> members = context.getMembers();
-        for (int i = 0; i < members.size(); i++) {
+        for (int i : context.getMembers().keySet()) {
             SXSSFCell cell = row.createCell(i);
-            ExcelColumn column = members.get(i).getAnnotation(ExcelColumn.class);
-            cell.setCellValue(StringUtil.isEmpty(column.name()) ? getName(members.get(i)) : column.name());
+            ExcelColumn column = context.getMembers().get(i).getAnnotation(ExcelColumn.class);
+            cell.setCellValue(StringUtil.isEmpty(column.name()) ? getName(context.getMembers().get(i)) : column.name());
             cell.setCellStyle(headerStyles.get(i));
         }
     }
 
     private void createRowCells(Row row, Object obj) throws Exception {
-        List<AccessibleObject> members = context.getMembers();
-        for (int i = 0; i < members.size(); i++) {
+        for (int i : context.getMembers().keySet()) {
             Cell cell = row.createCell(i);
-            ExcelColumn column = members.get(i).getAnnotation(ExcelColumn.class);
-            AccessibleObject accessibleObject = members.get(i);
+            ExcelColumn column = context.getMembers().get(i).getAnnotation(ExcelColumn.class);
+            AccessibleObject accessibleObject = context.getMembers().get(i);
             Object objValue = null;
             if (accessibleObject instanceof Field) {
                 Field field = (Field) accessibleObject;
@@ -189,7 +192,7 @@ public class SheetWriter {
 
     private void setColumnWidth() {
         sheet.trackAllColumnsForAutoSizing();
-        for (int i = 0; i < context.getMembers().size(); i++) {
+        for (int i : context.getMembers().keySet()) {
             ExcelColumn column = context.getMembers().get(i).getAnnotation(ExcelColumn.class);
             if (column.width() == -1) {
                 sheet.autoSizeColumn(i, true);
@@ -227,5 +230,10 @@ public class SheetWriter {
         } else {
             return null;
         }
+    }
+
+    private int getMaxKey(Set<Integer> keySet) {
+        Optional<Integer> max = keySet.stream().max(Comparator.comparingInt(Integer::intValue));
+        return max.get();
     }
 }

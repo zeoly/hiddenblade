@@ -62,10 +62,12 @@ public class SheetReader {
             XSSFRow row = sheet.getRow(i);
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
             T instance = declaredConstructor.newInstance();
-            for (int j = 0; j < row.getPhysicalNumberOfCells(); j++) {
+            for (int j = 0; j <= row.getLastCellNum(); j++) {
                 XSSFCell cell = row.getCell(j);
                 AccessibleObject accessibleObject = context.getMembers().get(j);
-                if (accessibleObject instanceof Field) {
+                if (accessibleObject == null) {
+                    continue;
+                } else if (accessibleObject instanceof Field) {
                     Field field = (Field) accessibleObject;
                     ExcelColumn column = field.getAnnotation(ExcelColumn.class);
                     if (field.getType() == String.class) {
