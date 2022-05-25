@@ -4,6 +4,7 @@ import com.yahacode.hiddenblade.app.doc.excel.annotation.ColumnPurpose;
 import com.yahacode.hiddenblade.app.doc.excel.annotation.ExcelColumn;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class TestModel {
@@ -17,8 +18,8 @@ public class TestModel {
 //    @ExcelColumn(order = 3, dateTimePattern = "yyyyMMddHHmmss")
 //    Date date;
 //
-//    @ExcelColumn(order = 2, dateTimePattern = "yyyyMMddHHmmss")
-//    LocalDateTime localDateTime;
+    @ExcelColumn(index = 2, dateTimePattern = "yyyyMMddHHmmss")
+LocalDateTime localDateTime;
 //
 //    @ExcelColumn(order = 5)
 //    Double dd;
@@ -97,13 +98,13 @@ public class TestModel {
 //        this.date = date;
 //    }
 //
-//    public LocalDateTime getLocalDateTime() {
-//        return localDateTime;
-//    }
-//
-//    public void setLocalDateTime(LocalDateTime localDateTime) {
-//        this.localDateTime = localDateTime;
-//    }
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
+    }
 //
 //    public Double getDd() {
 //        return dd;
