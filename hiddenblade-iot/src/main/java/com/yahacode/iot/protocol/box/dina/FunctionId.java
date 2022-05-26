@@ -36,6 +36,8 @@ public class FunctionId {
 
     public static final int EXTEND_EVENT = 0x9E;
 
+    public static final int COMMON_PARAM_ITEM = 0x9F;
+
     public static final int MAX_GPS = 0xA0;
 
     public static final int MAX_CAN = 0xA1;
@@ -73,6 +75,8 @@ public class FunctionId {
         public static final int HEARTBEAT_PARAM = 0x16;
 
         public static final int LOW_VOLT_ALERT_PARAM = 0x18;
+
+        public static final int IDLING_PARAM = 0x27;
 
         public static final int SETTING = 0x7F;
 

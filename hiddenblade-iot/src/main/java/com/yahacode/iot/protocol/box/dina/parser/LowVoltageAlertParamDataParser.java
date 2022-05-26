@@ -8,7 +8,7 @@ public class LowVoltageAlertParamDataParser extends AbstractDinaParser<LowVoltag
     @Override
     public LowVoltageParamData parse(byte[] data) {
         LowVoltageParamData lowVoltageParamData = new LowVoltageParamData();
-        lowVoltageParamData.setEnable(toInt(data[1]) == 1);
+        lowVoltageParamData.setEnable(toInt(data[0]) == 1);
         lowVoltageParamData.setAlertVoltage(MathUtil.precision(0.1 * toInt(data, 1, 2), 1));
         return lowVoltageParamData;
     }
