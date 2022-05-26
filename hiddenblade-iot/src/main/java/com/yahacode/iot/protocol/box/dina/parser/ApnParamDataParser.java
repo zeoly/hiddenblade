@@ -8,7 +8,7 @@ public class ApnParamDataParser extends AbstractDinaParser<ApnParamData> {
     public ApnParamData parse(byte[] data) {
         ApnParamData apnParamData = new ApnParamData();
         String all = toString(data, 0, data.length);
-        String[] array = all.split(",");
+        String[] array = all.split(",", -1);
         apnParamData.setApn(array[0]);
         apnParamData.setUsername(array[1]);
         apnParamData.setPassword(array[2]);

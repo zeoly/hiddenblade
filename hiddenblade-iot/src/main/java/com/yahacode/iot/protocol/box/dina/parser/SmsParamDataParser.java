@@ -12,7 +12,7 @@ public class SmsParamDataParser extends AbstractDinaParser<List<SmsParamData>> {
         List<SmsParamData> list = new LinkedList<>();
         int number = toInt(data[0]);
         String all = toString(data, 1, data.length - 1);
-        String[] array = all.split(",");
+        String[] array = all.split(",", -1);
         for (int i = 0; i < number; i += 2) {
             SmsParamData smsParamData = new SmsParamData();
             smsParamData.setIndex(array[i]);
