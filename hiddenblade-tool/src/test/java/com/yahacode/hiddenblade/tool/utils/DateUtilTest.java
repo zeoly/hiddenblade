@@ -15,4 +15,10 @@ class DateUtilTest {
         Date date2 = DateUtil.atStartOfDay(DateUtil.parseFull("2022-04-28 23:06:07"));
         assertNotNull(date2);
     }
+
+    @Test
+    void parseDate() {
+        Date date = DateUtil.parseDate("2022-03-03");
+        assertNotNull(date);
+    }
 }

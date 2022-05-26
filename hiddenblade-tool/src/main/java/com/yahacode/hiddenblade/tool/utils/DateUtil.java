@@ -67,6 +67,10 @@ public class DateUtil extends DateUtils {
         return parse(str, PATTERN_FULL_SHORT);
     }
 
+    public static Date parseDate(String str) {
+        return parse(str, PATTERN_DATE);
+    }
+
     public static Date atTime(Date date, int hour, int minute, int second, int millisecond) {
         Calendar calendar = toCalendar(date);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
