@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +52,7 @@ public class DateUtil extends DateUtils {
         try {
             DateFormat df = new SimpleDateFormat(pattern);
             return df.parse(str);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             log.warn("parse date string error: {}, pattern: {}", str, pattern, e);
             return null;
         }
