@@ -17,6 +17,10 @@ public class DateUtil extends DateUtils {
 
     public static final String PATTERN_FULL_SHORT = "yyyyMMddHHmmss";
 
+    public static final String PATTERN_PART = "yyyy-MM-dd HH:mm";
+
+    public static final String PATTERN_PART_SHORT = "yyyyMMddHHmm";
+
     public static final String PATTERN_DATE = "yyyy-MM-dd";
 
     public static final String PATTERN_DATE_SHORT = "yyyyMMdd";
@@ -34,6 +38,14 @@ public class DateUtil extends DateUtils {
 
     public static String formatFullShort(Date date) {
         return format(date, PATTERN_FULL_SHORT);
+    }
+
+    public static String formatPart(Date date) {
+        return format(date, PATTERN_PART);
+    }
+
+    public static String formatPartShort(Date date) {
+        return format(date, PATTERN_PART_SHORT);
     }
 
     public static String formatDate(Date date) {
@@ -64,6 +76,14 @@ public class DateUtil extends DateUtils {
 
     public static Date parseFullShort(String str) {
         return parse(str, PATTERN_FULL_SHORT);
+    }
+
+    public static Date parsePart(String str) {
+        return parse(str, PATTERN_PART);
+    }
+
+    public static Date parsePartShort(String str) {
+        return parse(str, PATTERN_PART_SHORT);
     }
 
     public static Date parseDate(String str) {
