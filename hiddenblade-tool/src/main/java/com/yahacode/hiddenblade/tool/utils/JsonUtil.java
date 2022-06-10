@@ -2,10 +2,10 @@ package com.yahacode.hiddenblade.tool.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +58,7 @@ public class JsonUtil {
 
     public static <T> List<T> toList(String jsonString, Class<T> clazz) {
         try {
-            JavaType javaType = getMapper().getTypeFactory().constructParametricType(ArrayList.class, clazz);
+            CollectionType javaType = getMapper().getTypeFactory().constructCollectionType(List.class, clazz);
             return getMapper().readValue(jsonString, javaType);
         } catch (JsonProcessingException e) {
             log.warn("String to list fail, String: {}, type: {}", jsonString, clazz.getSimpleName(), e);
