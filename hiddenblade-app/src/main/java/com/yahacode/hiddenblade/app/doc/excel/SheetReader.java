@@ -101,6 +101,7 @@ public class SheetReader {
             XSSFRow row = sheet.getRow(i);
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
             T instance = declaredConstructor.newInstance();
+            boolean emptyRow = true;
             for (int j = 0; j <= row.getLastCellNum(); j++) {
                 XSSFCell cell = row.getCell(j);
                 AccessibleObject accessibleObject = context.getMembers().get(j);
@@ -117,9 +118,9 @@ public class SheetReader {
                     } else if (field.getType() == Double.class) {
                         field.set(instance, Double.parseDouble(getCellString(cell)));
                     } else if (field.getType() == Long.class) {
-                        field.setLong(instance, Long.parseLong(getCellString(cell)));
+                        field.set(instance, Long.parseLong(getCellString(cell)));
                     } else if (field.getType() == Boolean.class) {
-                        field.setBoolean(instance, cell.getBooleanCellValue());
+                        field.set(instance, cell.getBooleanCellValue());
                     } else if (field.getType() == LocalDateTime.class) {
                         String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_FULL : column.dateTimePattern();
                         field.set(instance, LocalDateTime.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
@@ -137,8 +138,11 @@ public class SheetReader {
                     Method method = (Method) accessibleObject;
                     method.invoke(instance, getCellString(cell));
                 }
+                emptyRow = false;
             }
-            result.add(instance);
+            if (!emptyRow) {
+                result.add(instance);
+            }
         }
         return result;
     }
