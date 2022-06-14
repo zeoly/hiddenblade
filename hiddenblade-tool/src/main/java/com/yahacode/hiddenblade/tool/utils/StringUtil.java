@@ -231,11 +231,4 @@ public class StringUtil extends StringUtils {
         }
         return new String(result);
     }
-
-    public static void main(String[] args) {
-        System.out.println(similarDegreeMin("中国石化东阳白鹤（人民路）", "金东阳白鹤"));
-        System.out.println(similarDegreeMin("中国石化（光辉街）", "衡阳市光辉路"));
-        System.out.println(similarDegreeMin("中国石油（五公里站）", "重庆销售五公里"));
-
-    }
 }
