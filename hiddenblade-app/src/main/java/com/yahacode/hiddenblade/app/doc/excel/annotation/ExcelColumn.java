@@ -33,7 +33,7 @@ public @interface ExcelColumn {
     int index();
 
     /**
-     * column width, char unit
+     * column width, char unit, default for auto-size
      *
      * @return column width
      */

@@ -69,10 +69,25 @@ public class SheetWriter {
         createHeader();
     }
 
+    /**
+     * open write process, ready to fill with data
+     *
+     * @param fileName excel file name
+     * @param clazz    data class
+     * @return writer to write
+     */
     public static SheetWriter open(String fileName, Class clazz) {
         return open(fileName, fileName, clazz);
     }
 
+    /**
+     * open write process, ready to fill with data
+     *
+     * @param fileName  excel file name
+     * @param sheetName excel sheet name
+     * @param clazz     data class
+     * @return writer to write
+     */
     public static SheetWriter open(String fileName, String sheetName, Class clazz) {
         SXSSFWorkbook wb = new SXSSFWorkbook();
         SXSSFSheet sheet = wb.createSheet(sheetName);
@@ -80,6 +95,12 @@ public class SheetWriter {
         return new SheetWriter(fileName, wb, sheet, context);
     }
 
+    /**
+     * fill the sheet with data
+     *
+     * @param list data list
+     * @throws Exception write exception
+     */
     public void fill(List<? extends Object> list) throws Exception {
         int rowNum = sheet.getPhysicalNumberOfRows();
         for (int i = 0; i < list.size(); i++) {
@@ -88,6 +109,12 @@ public class SheetWriter {
         }
     }
 
+    /**
+     * export excel file to response output
+     *
+     * @param response http response
+     * @throws IOException export exception
+     */
     public void export(HttpServletResponse response) throws IOException {
         response.reset();
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
@@ -99,6 +126,11 @@ public class SheetWriter {
         out.close();
     }
 
+    /**
+     * write data to file
+     *
+     * @throws IOException write exception
+     */
     public void write() throws IOException {
         try (OutputStream fileOut = new FileOutputStream(fileName + ".xlsx")) {
             setColumnWidth();
@@ -107,20 +139,56 @@ public class SheetWriter {
         }
     }
 
+    /**
+     * export excel file to response output
+     *
+     * @param response http response
+     * @param fileName excel file name
+     * @param list     data list
+     * @param clazz    data class
+     * @throws Exception export exception
+     */
     public static void export(HttpServletResponse response, String fileName, List<? extends Object> list, Class clazz) throws Exception {
         export(response, fileName, fileName, list, clazz);
     }
 
+    /**
+     * export excel file to response output
+     *
+     * @param response  http response
+     * @param fileName  excel file name
+     * @param sheetName excel sheet name
+     * @param list      data list
+     * @param clazz     data class
+     * @throws Exception
+     */
     public static void export(HttpServletResponse response, String fileName, String sheetName, List<? extends Object> list, Class clazz) throws Exception {
         SheetWriter writer = open(fileName, sheetName, clazz);
         writer.fill(list);
         writer.export(response);
     }
 
+    /**
+     * write data to file
+     *
+     * @param fileName excel file name
+     * @param list     data list
+     * @param clazz    data class
+     * @throws Exception write exception
+     */
     public static void write(String fileName, List<? extends Object> list, Class clazz) throws Exception {
         write(fileName, fileName, list, clazz);
     }
 
+    /**
+     * write data to file
+     *
+     * @param fileName  excel file name
+     * @param sheetName excel sheet name
+     * @param list      data list
+     * @param clazz     data class
+     * @throws Exception write exception
+     */
     public static void write(String fileName, String sheetName, List<? extends Object> list, Class clazz) throws Exception {
         SheetWriter writer = open(fileName, sheetName, clazz);
         writer.fill(list);

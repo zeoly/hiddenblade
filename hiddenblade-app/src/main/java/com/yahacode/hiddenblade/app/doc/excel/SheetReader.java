@@ -26,13 +26,34 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Excel sheet reader/importer
+ *
+ * @author zengyongli
+ * @since 2022/05/20
+ */
 public class SheetReader {
 
+    /**
+     * count the row of sheet
+     *
+     * @param file excel file
+     * @return row count
+     * @throws IOException count exception
+     */
     public static int countRow(File file) throws IOException {
         FileInputStream inputStream = new FileInputStream(file);
         return countRow(inputStream);
     }
 
+
+    /**
+     * count the row of sheet
+     *
+     * @param file upload file
+     * @return row count
+     * @throws IOException count exception
+     */
     public static int countRow(MultipartFile file) throws IOException {
         InputStream inputStream = file.getInputStream();
         return countRow(inputStream);
@@ -44,10 +65,28 @@ public class SheetReader {
         return sheet.getPhysicalNumberOfRows();
     }
 
+    /**
+     * read upload file to list
+     *
+     * @param file  upload file
+     * @param clazz data class
+     * @param <T>   data type
+     * @return data list
+     * @throws Exception read exception
+     */
     public static <T> List<T> read(MultipartFile file, Class<T> clazz) throws Exception {
         return read(file.getInputStream(), clazz);
     }
 
+    /**
+     * read file to list
+     *
+     * @param file  excel file
+     * @param clazz data class
+     * @param <T>   data type
+     * @return data list
+     * @throws Exception read exception
+     */
     public static <T> List<T> read(File file, Class<T> clazz) throws Exception {
         FileInputStream fileInputStream = new FileInputStream(file);
         return read(fileInputStream, clazz);
