@@ -47,6 +47,13 @@ public @interface ExcelColumn {
     String dateTimePattern() default "";
 
     /**
+     * whether cell value can be optional
+     *
+     * @return cell value optional
+     */
+    boolean optional() default true;
+
+    /**
      * sheet header style
      *
      * @return cell style
