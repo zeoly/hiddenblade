@@ -7,6 +7,7 @@ import com.yahacode.hiddenblade.tool.utils.JsonUtil;
 import com.yahacode.hiddenblade.tool.utils.StringUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
@@ -285,7 +286,9 @@ public class SheetWriter {
         cellStyle.setBorderTop(style.border());
         cellStyle.setBorderLeft(style.border());
         cellStyle.setBorderRight(style.border());
-        return cellStyle;
+        DataFormat format = workbook.createDataFormat();
+        cellStyle.setDataFormat(format.getFormat("@"));
+       return cellStyle;
     }
 
     private String getName(AccessibleObject accessibleObject) {
