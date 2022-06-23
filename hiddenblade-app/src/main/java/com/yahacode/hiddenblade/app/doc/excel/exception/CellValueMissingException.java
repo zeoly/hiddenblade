@@ -10,16 +10,18 @@ public class CellValueMissingException extends Exception {
 
     int row;
 
-    String column;
+    String columnName;
 
-    public CellValueMissingException(int row, String column) {
+    public CellValueMissingException(int row, String columnName) {
         this.row = row;
-        this.column = column;
+        this.columnName = columnName;
     }
 
-    protected CellValueMissingException(Throwable cause, int row, String column) {
-        super(cause);
-        this.row = row;
-        this.column = column;
+    public int getRow() {
+        return row;
+    }
+
+    public String getColumnName() {
+        return columnName;
     }
 }
