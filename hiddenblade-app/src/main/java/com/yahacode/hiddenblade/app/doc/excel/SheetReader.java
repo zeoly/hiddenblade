@@ -22,6 +22,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -131,6 +132,8 @@ public class SheetReader {
                             field.set(instance, value.intValue());
                         } else if (field.getType() == Double.class) {
                             field.set(instance, Double.parseDouble(getCellString(cell)));
+                        } else if (field.getType() == BigDecimal.class) {
+                            field.set(instance, new BigDecimal(getCellString(cell)));
                         } else if (field.getType() == Long.class) {
                             field.set(instance, Long.parseLong(getCellString(cell)));
                         } else if (field.getType() == Boolean.class) {
@@ -149,8 +152,8 @@ public class SheetReader {
                             field.set(instance, DateUtil.parse(getDateString(cell, pattern), pattern));
                         }
                     } catch (Exception e) {
-                        log.error("reading cell value [{}] to field [{}] error", cell.getRawValue(), field.getName(), e);
-                        throw new CellFormatException(e, i, getName(field), cell.getRawValue());
+                        log.error("reading cell value [{}] to field [{}] error", cell.getStringCellValue(), field.getName(), e);
+                        throw new CellFormatException(e, i, getName(field), cell.getStringCellValue());
                     }
                 } else if (accessibleObject instanceof Method) {
                     Method method = (Method) accessibleObject;
@@ -168,7 +171,10 @@ public class SheetReader {
     }
 
     private static String getName(AccessibleObject accessibleObject) {
-        if (accessibleObject instanceof Field) {
+        ExcelColumn annotation = accessibleObject.getAnnotation(ExcelColumn.class);
+        if (annotation != null && StringUtil.isNotBlank(annotation.name())) {
+            return annotation.name();
+        } else if (accessibleObject instanceof Field) {
             Field field = (Field) accessibleObject;
             return field.getName();
         } else if (accessibleObject instanceof Method) {
