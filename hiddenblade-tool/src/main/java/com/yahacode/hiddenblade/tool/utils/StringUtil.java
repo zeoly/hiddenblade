@@ -21,9 +21,13 @@ public class StringUtil extends StringUtils {
 
     private static final Pattern datePattern = Pattern.compile("(19|20|21)\\d{2}[-|/]((0[1-9])|(1[0-2]))[-|/]((0[1-9])|([12][0-9])|(3[0-1]))");
 
+    private static final Pattern dateShortPattern = Pattern.compile("(19|20|21)\\d{2}((0[1-9])|(1[0-2]))((0[1-9])|([12][0-9])|(3[0-1]))");
+
     private static final Pattern hourMinutePattern = Pattern.compile("(([01][0-9])|(2[0-3]))(:[0-5][0-9])");
 
     private static final Pattern timePattern = Pattern.compile("(([01][0-9])|(2[0-3]))(:[0-5][0-9]){2}");
+
+    private static final Pattern timeShortPattern = Pattern.compile("(([01][0-9])|(2[0-3]))([0-5][0-9]){2}");
 
     private static final Pattern vinPattern = Pattern.compile("[A-HJ-NPR-Z\\d]{17}");
 
@@ -97,12 +101,20 @@ public class StringUtil extends StringUtils {
         return isPattern(str, datePattern);
     }
 
+    public static boolean isDateShort(String str) {
+        return isPattern(str, dateShortPattern);
+    }
+
     public static boolean isHourMinute(String str) {
         return isPattern(str, hourMinutePattern);
     }
 
     public static boolean isTime(String str) {
         return isPattern(str, timePattern);
+    }
+
+    public static boolean isTimeShort(String str) {
+        return isPattern(str, timeShortPattern);
     }
 
     public static boolean isDateHourMinute(String str) {
@@ -119,6 +131,18 @@ public class StringUtil extends StringUtils {
             return false;
         }
         return isDate(part[0]) && isTime(part[1]);
+    }
+
+    public static boolean isDateTimeShort(String str) {
+        if (isBlank(str)) {
+            return false;
+        }
+        if (str.length() != 14) {
+            return false;
+        }
+        String date = left(str, 8);
+        String time = right(str, 6);
+        return isDateShort(date) && isTimeShort(time);
     }
 
     public static boolean isVIN(String str) {

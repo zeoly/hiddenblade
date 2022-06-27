@@ -21,4 +21,22 @@ class DateUtilTest {
         Date date = DateUtil.parseDate("2022-03-03");
         assertNotNull(date);
     }
+
+    @Test
+    void formatTime() {
+        String formatTime = DateUtil.formatTime(new Date());
+        System.out.println(formatTime);
+    }
+
+    @Test
+    void formatPartTime() {
+        String formatTime = DateUtil.formatPartTime(new Date());
+        System.out.println(formatTime);
+    }
+
+    @Test
+    void formatPartTimeShort() {
+        String formatTime = DateUtil.formatPartTimeShort(new Date());
+        System.out.println(formatTime);
+    }
 }

@@ -12,7 +12,7 @@ class StringUtilTest {
     }
 
     @Test
-    void isYearMonth(){
+    void isYearMonth() {
         assertTrue(StringUtil.isYearMonth("2021-02"));
     }
 
@@ -46,6 +46,14 @@ class StringUtilTest {
         assertFalse(StringUtil.isDateTime("2021-01-32 23:12:12"));
         assertFalse(StringUtil.isDateTime("2021-00-01 23:12:34"));
         assertFalse(StringUtil.isDateTime("2021-13-01 23:12:34"));
+    }
+
+    @Test
+    void isDateTimeShort() {
+        assertTrue(StringUtil.isDateTimeShort("20220101121212"));
+        assertFalse(StringUtil.isDateTimeShort("20220101 121212"));
+        assertFalse(StringUtil.isDateTimeShort("20220101241212"));
+        assertFalse(StringUtil.isDateTimeShort("20220132121212"));
     }
 
     @Test

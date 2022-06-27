@@ -27,6 +27,12 @@ public class DateUtil extends DateUtils {
 
     public static final String PATTERN_TIME = "HH:mm:ss";
 
+    public static final String PATTERN_TIME_SHORT = "HHmmss";
+
+    public static final String PATTERN_PART_TIME = "HH:mm";
+
+    public static final String PATTERN_PART_TIME_SHORT = "HHmm";
+
     public static String format(Date date, String pattern) {
         DateFormat df = new SimpleDateFormat(pattern);
         return df.format(date);
@@ -60,6 +66,18 @@ public class DateUtil extends DateUtils {
         return format(date, PATTERN_TIME);
     }
 
+    public static String formatTimeShort(Date date) {
+        return format(date, PATTERN_TIME_SHORT);
+    }
+
+    public static String formatPartTime(Date date) {
+        return format(date, PATTERN_PART_TIME);
+    }
+
+    public static String formatPartTimeShort(Date date) {
+        return format(date, PATTERN_PART_TIME_SHORT);
+    }
+
     public static Date parse(String str, String pattern) {
         try {
             DateFormat df = new SimpleDateFormat(pattern);
@@ -90,6 +108,10 @@ public class DateUtil extends DateUtils {
         return parse(str, PATTERN_DATE);
     }
 
+    public static Date parseDateShort(String str) {
+        return parse(str, PATTERN_DATE_SHORT);
+    }
+
     public static Date atTime(Date date, int hour, int minute, int second, int millisecond) {
         Calendar calendar = toCalendar(date);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -105,6 +127,14 @@ public class DateUtil extends DateUtils {
 
     public static Date atEndOfDay(Date date) {
         return atTime(date, 23, 59, 59, 999);
+    }
+
+    public static Date atYesterday() {
+        return addDays(new Date(), -1);
+    }
+
+    public static Date atTomorrow() {
+        return addDays(new Date(), 1);
     }
 
     public static boolean isAround(Date date, Date target, int second) {
