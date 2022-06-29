@@ -161,7 +161,7 @@ public class SheetWriter {
      * @param sheetName excel sheet name
      * @param list      data list
      * @param clazz     data class
-     * @throws Exception
+     * @throws Exception export error
      */
     public static void export(HttpServletResponse response, String fileName, String sheetName, List<? extends Object> list, Class clazz) throws Exception {
         SheetWriter writer = open(fileName, sheetName, clazz);
@@ -288,7 +288,7 @@ public class SheetWriter {
         cellStyle.setBorderRight(style.border());
         DataFormat format = workbook.createDataFormat();
         cellStyle.setDataFormat(format.getFormat("@"));
-       return cellStyle;
+        return cellStyle;
     }
 
     private String getName(AccessibleObject accessibleObject) {
