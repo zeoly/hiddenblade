@@ -126,7 +126,7 @@ public class SheetReader {
                     ExcelColumn column = field.getAnnotation(ExcelColumn.class);
                     try {
                         if (field.getType() == String.class) {
-                            field.set(instance, cell.getStringCellValue());
+                            field.set(instance, getCellString(cell));
                         } else if (field.getType() == Integer.class) {
                             Double value = Double.parseDouble(getCellString(cell));
                             field.set(instance, value.intValue());
