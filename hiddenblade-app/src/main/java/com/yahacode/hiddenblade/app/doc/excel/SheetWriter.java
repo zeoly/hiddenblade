@@ -277,6 +277,7 @@ public class SheetWriter {
         Font font = workbook.createFont();
         font.setFontHeightInPoints(style.fontSize());
         font.setBold(style.bold());
+        font.setFontName(style.fontName());
         cellStyle.setFont(font);
         if (style.fillColor() != -1) {
             cellStyle.setFillForegroundColor(style.fillColor());

@@ -33,6 +33,13 @@ public @interface Style {
     short fontSize() default 11;
 
     /**
+     * cell font name
+     *
+     * @return font name
+     */
+    String fontName() default "等线";
+
+    /**
      * cell foreground color, default none
      *
      * @return foreground color
