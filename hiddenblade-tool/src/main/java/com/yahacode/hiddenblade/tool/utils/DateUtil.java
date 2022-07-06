@@ -34,6 +34,9 @@ public class DateUtil extends DateUtils {
     public static final String PATTERN_PART_TIME_SHORT = "HHmm";
 
     public static String format(Date date, String pattern) {
+        if (date == null || pattern == null) {
+            return null;
+        }
         DateFormat df = new SimpleDateFormat(pattern);
         return df.format(date);
     }
