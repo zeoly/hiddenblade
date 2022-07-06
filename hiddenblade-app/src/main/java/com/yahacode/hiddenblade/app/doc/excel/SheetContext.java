@@ -74,7 +74,7 @@ public class SheetContext {
                 if (column != null && column.purpose() != ColumnPurpose.IMPORT) {
                     log.info("read method for export: {}, name:{}, order:{}", method.getName(), column.name(), column.index());
                     if (context.getMembers().containsKey(column.index())) {
-                        throw new RuntimeException("order collision: " + column.index());
+                        throw new RuntimeException("index collision: " + column.index());
                     }
                     method.setAccessible(true);
                     context.getMembers().put(column.index(), method);

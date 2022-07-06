@@ -193,11 +193,10 @@ public class SheetReader {
             case NUMERIC:
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
                     return DateUtil.formatFull(cell.getDateCellValue());
-                } else {
-                    return String.valueOf(cell.getNumericCellValue());
                 }
             default:
-                return cell.getRawValue();
+                cell.setCellType(CellType.STRING);
+                return cell.toString();
         }
     }
 
@@ -209,11 +208,10 @@ public class SheetReader {
             case NUMERIC:
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
                     return DateUtil.format(cell.getDateCellValue(), pattern);
-                } else {
-                    return String.valueOf(cell.getNumericCellValue());
                 }
             default:
-                return cell.getRawValue();
+                cell.setCellType(CellType.STRING);
+                return cell.toString();
         }
     }
 
