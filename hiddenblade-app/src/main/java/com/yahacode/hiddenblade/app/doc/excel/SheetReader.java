@@ -189,7 +189,7 @@ public class SheetReader {
         CellType cellType = cell.getCellType();
         switch (cellType) {
             case STRING:
-                return cell.getStringCellValue();
+                return cell.getStringCellValue().trim();
             case NUMERIC:
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
                     return DateUtil.formatFull(cell.getDateCellValue());
@@ -204,7 +204,7 @@ public class SheetReader {
         CellType cellType = cell.getCellType();
         switch (cellType) {
             case STRING:
-                return cell.getStringCellValue();
+                return cell.getStringCellValue().trim();
             case NUMERIC:
                 if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) {
                     return DateUtil.format(cell.getDateCellValue(), pattern);
