@@ -3,6 +3,8 @@ package com.yahacode.hiddenblade.app.doc.excel;
 import com.yahacode.hiddenblade.app.doc.excel.annotation.ExcelColumn;
 import com.yahacode.hiddenblade.app.doc.excel.exception.CellFormatException;
 import com.yahacode.hiddenblade.app.doc.excel.exception.CellValueMissingException;
+import com.yahacode.hiddenblade.app.doc.excel.exception.ExceptionRow;
+import com.yahacode.hiddenblade.app.doc.excel.exception.ExceptionType;
 import com.yahacode.hiddenblade.tool.utils.DateUtil;
 import com.yahacode.hiddenblade.tool.utils.StringUtil;
 import org.apache.poi.ss.usermodel.CellType;
@@ -82,7 +84,13 @@ public class SheetReader {
      * @throws Exception read exception
      */
     public static <T> List<T> read(MultipartFile file, Class<T> clazz) throws Exception {
-        return read(file.getInputStream(), clazz);
+        return read(file.getInputStream(), clazz, false, null);
+    }
+
+    public static <T> ReservedResult<T> readReserved(MultipartFile file, Class<T> clazz) throws Exception {
+        List<ExceptionRow> exceptionRows = new LinkedList<>();
+        List<T> list = read(file.getInputStream(), clazz, true, exceptionRows);
+        return new ReservedResult<T>(list, exceptionRows);
     }
 
     /**
@@ -96,75 +104,31 @@ public class SheetReader {
      */
     public static <T> List<T> read(File file, Class<T> clazz) throws Exception {
         FileInputStream fileInputStream = new FileInputStream(file);
-        return read(fileInputStream, clazz);
+        return read(fileInputStream, clazz, false, null);
     }
 
-    private static <T> List<T> read(InputStream inputStream, Class<T> clazz) throws Exception {
+    public static <T> ReservedResult<T> readReserved(File file, Class<T> clazz) throws Exception {
+        List<ExceptionRow> exceptionRows = new LinkedList<>();
+        FileInputStream fileInputStream = new FileInputStream(file);
+        List<T> list = read(fileInputStream, clazz, true, exceptionRows);
+        return new ReservedResult<T>(list, exceptionRows);
+    }
+
+    private static <T> List<T> read(InputStream inputStream, Class<T> clazz, boolean reserved, List<ExceptionRow> exceptionRows) throws Exception {
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
         XSSFSheet sheet = workbook.getSheetAt(0);
         SheetContext context = SheetContext.forImport(clazz);
         List<T> result = new LinkedList<>();
         for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
             XSSFRow row = sheet.getRow(i);
-            Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
-            T instance = declaredConstructor.newInstance();
             if (isEmptyRow(row)) {
-                continue;
-            }
-            for (int j = 0; j <= row.getLastCellNum(); j++) {
-                XSSFCell cell = row.getCell(j);
-                AccessibleObject accessibleObject = context.getMembers().get(j);
-                if (accessibleObject == null) {
+                if (reserved) {
+                    result.add(null);
+                } else {
                     continue;
-                } else if (cell == null || cell.getCellType() == CellType.BLANK) {
-                    ExcelColumn column = accessibleObject.getAnnotation(ExcelColumn.class);
-                    if (!column.optional()) {
-                        throw new CellValueMissingException(i, getName(accessibleObject));
-                    }
-                } else if (accessibleObject instanceof Field) {
-                    Field field = (Field) accessibleObject;
-                    ExcelColumn column = field.getAnnotation(ExcelColumn.class);
-                    try {
-                        if (field.getType() == String.class) {
-                            field.set(instance, getCellString(cell));
-                        } else if (field.getType() == Integer.class) {
-                            Double value = Double.parseDouble(getCellString(cell));
-                            field.set(instance, value.intValue());
-                        } else if (field.getType() == Double.class) {
-                            field.set(instance, Double.parseDouble(getCellString(cell)));
-                        } else if (field.getType() == BigDecimal.class) {
-                            field.set(instance, new BigDecimal(getCellString(cell)));
-                        } else if (field.getType() == Long.class) {
-                            field.set(instance, Long.parseLong(getCellString(cell)));
-                        } else if (field.getType() == Boolean.class) {
-                            field.set(instance, cell.getBooleanCellValue());
-                        } else if (field.getType() == LocalDateTime.class) {
-                            String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_FULL : column.dateTimePattern();
-                            field.set(instance, LocalDateTime.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
-                        } else if (field.getType() == LocalDate.class) {
-                            String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_DATE : column.dateTimePattern();
-                            field.set(instance, LocalDate.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
-                        } else if (field.getType() == LocalTime.class) {
-                            String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_TIME : column.dateTimePattern();
-                            field.set(instance, LocalTime.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
-                        } else if (field.getType() == Date.class) {
-                            String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_FULL : column.dateTimePattern();
-                            field.set(instance, DateUtil.parse(getDateString(cell, pattern), pattern));
-                        }
-                    } catch (Exception e) {
-                        log.error("reading cell value [{}] to field [{}] error", cell.getStringCellValue(), field.getName(), e);
-                        throw new CellFormatException(e, i, getName(field), cell.getStringCellValue());
-                    }
-                } else if (accessibleObject instanceof Method) {
-                    Method method = (Method) accessibleObject;
-                    try {
-                        method.invoke(instance, getCellString(cell));
-                    } catch (Exception e) {
-                        log.error("invoke cell value [{}] of field [{}] error", cell.getStringCellValue(), method.getName(), e);
-                        throw new CellFormatException(e, i, getName(method), cell.getStringCellValue());
-                    }
                 }
             }
+            T instance = convertRowToInstance(row, context, clazz, reserved, exceptionRows);
             result.add(instance);
         }
         return result;
@@ -223,6 +187,83 @@ public class SheetReader {
             }
         }
         return true;
+    }
+
+    private static <T> T convertRowToInstance(XSSFRow row, SheetContext context, Class<T> clazz, boolean reserved, List<ExceptionRow> exceptionRows) throws Exception {
+        Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
+        T instance = declaredConstructor.newInstance();
+        ExceptionRow exceptionRow = new ExceptionRow(row.getRowNum());
+        for (int j = 0; j <= row.getLastCellNum(); j++) {
+            XSSFCell cell = row.getCell(j);
+            AccessibleObject accessibleObject = context.getMembers().get(j);
+            if (accessibleObject == null) {
+                continue;
+            } else if (cell == null || cell.getCellType() == CellType.BLANK) {
+                ExcelColumn column = accessibleObject.getAnnotation(ExcelColumn.class);
+                if (!column.optional()) {
+                    if (reserved) {
+                        exceptionRow.addColumn(getName(accessibleObject), ExceptionType.MISSING);
+                    } else {
+                        throw new CellValueMissingException(row.getRowNum(), getName(accessibleObject));
+                    }
+                }
+            } else if (accessibleObject instanceof Field) {
+                Field field = (Field) accessibleObject;
+                ExcelColumn column = field.getAnnotation(ExcelColumn.class);
+                try {
+                    if (field.getType() == String.class) {
+                        field.set(instance, getCellString(cell));
+                    } else if (field.getType() == Integer.class) {
+                        Double value = Double.parseDouble(getCellString(cell));
+                        field.set(instance, value.intValue());
+                    } else if (field.getType() == Double.class) {
+                        field.set(instance, Double.parseDouble(getCellString(cell)));
+                    } else if (field.getType() == BigDecimal.class) {
+                        field.set(instance, new BigDecimal(getCellString(cell)));
+                    } else if (field.getType() == Long.class) {
+                        field.set(instance, Long.parseLong(getCellString(cell)));
+                    } else if (field.getType() == Boolean.class) {
+                        field.set(instance, cell.getBooleanCellValue());
+                    } else if (field.getType() == LocalDateTime.class) {
+                        String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_FULL : column.dateTimePattern();
+                        field.set(instance, LocalDateTime.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
+                    } else if (field.getType() == LocalDate.class) {
+                        String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_DATE : column.dateTimePattern();
+                        field.set(instance, LocalDate.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
+                    } else if (field.getType() == LocalTime.class) {
+                        String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_TIME : column.dateTimePattern();
+                        field.set(instance, LocalTime.parse(getDateString(cell, pattern), DateTimeFormatter.ofPattern(pattern)));
+                    } else if (field.getType() == Date.class) {
+                        String pattern = StringUtil.isEmpty(column.dateTimePattern()) ? DateUtil.PATTERN_FULL : column.dateTimePattern();
+                        field.set(instance, DateUtil.parse(getDateString(cell, pattern), pattern));
+                    }
+                } catch (Exception e) {
+                    log.error("reading cell value [{}] to field [{}] error", cell.getStringCellValue(), field.getName(), e);
+                    if (reserved) {
+                        exceptionRow.addColumn(getName(accessibleObject), ExceptionType.FORMAT);
+                    } else {
+                        throw new CellFormatException(e, row.getRowNum(), getName(field), cell.getStringCellValue());
+                    }
+                }
+            } else if (accessibleObject instanceof Method) {
+                Method method = (Method) accessibleObject;
+                try {
+                    method.invoke(instance, getCellString(cell));
+                } catch (Exception e) {
+                    log.error("invoke cell value [{}] of field [{}] error", cell.getStringCellValue(), method.getName(), e);
+                    if (reserved) {
+                        exceptionRow.addColumn(getName(accessibleObject), ExceptionType.FORMAT);
+                    } else {
+                        throw new CellFormatException(e, row.getRowNum(), getName(method), cell.getStringCellValue());
+                    }
+                }
+            }
+        }
+        if (exceptionRow.hasException()) {
+            exceptionRows.add(exceptionRow);
+            instance = null;
+        }
+        return instance;
     }
 
 //    List list = new ArrayList<>();
